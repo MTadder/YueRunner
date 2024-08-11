@@ -1,6 +1,8 @@
 import * as vscode from "vscode";
 import * as path from "path";
 
+const terminalName = "YueRunner";
+
 export function activate(context: vscode.ExtensionContext) {
   const sbi = vscode.window.createStatusBarItem(
     vscode.StatusBarAlignment.Right,
@@ -33,6 +35,15 @@ export function activate(context: vscode.ExtensionContext) {
     autoHideStatusButton(editor!.document.fileName);
   }
 
+  vscode.window.terminals.forEach((term) => {
+    // close any old 月Runner terminals.
+    if (term.name === terminalName) {
+      term.hide();
+      term.sendText("exit");
+      term.dispose();
+    }
+  });
+
   context.subscriptions.push(
     onEditorChanged,
     sbi,
@@ -48,21 +59,16 @@ export function activate(context: vscode.ExtensionContext) {
   );
 }
 
-function getTerminal(): vscode.Terminal {
-  vscode.window.terminals.forEach((term) => {
-    // close all inactive 月Runner terminals
-    if (term.name === "YueRunner") {
-      // if (term.exitCode === undefined) {
-      //   term.show();
-      //   return term;
-      // }
-      term.hide();
-      term.sendText("exit");
-      term.dispose();
+function getTerminal(availableTerminals: readonly vscode.Terminal[]): vscode.Terminal {
+  for (let i = 0; i < availableTerminals.length; i++) {
+    const term = availableTerminals[i];
+    if (term.name === terminalName) {
+      term.show();
+      return term;
     }
-  });
+  }
   const term = vscode.window.createTerminal({
-    name: "YueRunner",
+    name: terminalName,
   });
   term.show();
   return term;
@@ -86,7 +92,7 @@ function assertTextEditor() {
 function compileYueDirAndLove(): void {
   assertTextEditor();
   const editor = vscode.window.activeTextEditor!;
-  const term = getTerminal();
+  const term = getTerminal(vscode.window.terminals);
   term.sendText("\byue " + getFileRootPath(editor.document.fileName), true);
   term.sendText("\blovec " + getFileRootPath(editor.document.fileName), true);
   // Check for errors? TODO.
@@ -96,14 +102,14 @@ function compileYueDirAndLove(): void {
 function compileYueDir(): void {
   assertTextEditor();
   const editor = vscode.window.activeTextEditor!;
-  const term = getTerminal();
+  const term = getTerminal(vscode.window.terminals);
   term.sendText("\byue " + getFileRootPath(editor.document.fileName));
 }
 
 function compileYue(): void {
   assertTextEditor();
   const editor = vscode.window.activeTextEditor!;
-  const term = getTerminal();
+  const term = getTerminal(vscode.window.terminals);
   term.sendText("\byue " + editor.document.fileName.replaceAll("\\", "/"));
 }
 
