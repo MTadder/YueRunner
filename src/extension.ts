@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import * as path from "path";
 
-const terminalName = "YueRunner";
+const terminalName = "月Runner";
 
 export function activate(context: vscode.ExtensionContext) {
   const sbi = vscode.window.createStatusBarItem(
@@ -79,7 +79,7 @@ function getFileRootPath(fromFilePath: string): string {
 }
 function assertTextEditor() {
   const cantCompileMessage: string =
-    "$(warning)YueRunner is unable to compile this";
+    "$(warning)月Runner is unable to compile this";
   if (vscode.window.activeTextEditor === undefined) {
     vscode.window.showErrorMessage(cantCompileMessage);
     return;
