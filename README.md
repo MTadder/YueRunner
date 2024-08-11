@@ -17,11 +17,11 @@
 ## Features
 
 provides palette commands, and a status bar button
-for compiling any currently open `月 yue` script.
+for compiling any currently open `yue` script.
 
 ### Commands:
 
-###### Open your command palette with `CTRL` + `SHIFT` + `P`
+> Open your command palette with `CTRL` + `SHIFT` + `P`
 
 - `Compile this Yuescript`
 - `Compile all Yuescripts (in this directory)`
@@ -33,7 +33,7 @@ for compiling any currently open `月 yue` script.
 
 - Ensure that `yue` is visible within your `PATH`.
 
-- If you want [LÖVE2D](https://love2d.org) support, [install it](https://github.com/love2d/love/releases/latest), and add it to your `PATH`.
+- If you want [`LÖVE2D`](https://love2d.org) support, [install it](https://github.com/love2d/love/releases/latest), and add it to your `PATH`.
 
 ## Extension Settings
 
@@ -43,8 +43,9 @@ for compiling any currently open `月 yue` script.
 
 > Help out by reporting any issues to the [Github](https://github.com/MTadder/YueRunner)
 
-- Settings pertaining to `yue` are currently unavailable.
-- If you try to use `LÖVE2D` without it being installed, an error will occur.
+- Settings pertaining to `yue` *are currently unavailable*.
+- If *you try to use `LÖVE2D` without it being installed*, an error will occur.
+- If *you change your default shell profile* while a `yue` script is open, the status bar button will disappear, **until you reopen the tab**.
 
 ---
 

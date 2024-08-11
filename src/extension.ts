@@ -19,6 +19,15 @@ export function activate(context: vscode.ExtensionContext) {
     name: "月Runner",
   });
 
+  function getTerm(): vscode.Terminal {
+    if (yueTerminal === undefined) {
+      return vscode.window.createTerminal({
+        name: "月Runner",
+      });
+    }
+    return yueTerminal;
+  }
+
   let autoHideStatusButton = (fileName: string) => {
     if (fileName.endsWith(".yue")) {
       statusBarItem.show();
@@ -29,7 +38,8 @@ export function activate(context: vscode.ExtensionContext) {
 
   const onEditorChanged = vscode.window.onDidChangeActiveTextEditor(
     (e: vscode.TextEditor | undefined) => {
-      if (e === null) {
+      if (e === undefined) {
+        statusBarItem.hide();
         return;
       } else {
         autoHideStatusButton(e!.document.fileName);
@@ -46,7 +56,7 @@ export function activate(context: vscode.ExtensionContext) {
   statusBarItem.command = "yuescriptrunner.compile";
   statusBarItem.text = "$(zap)Compile Yuescript";
   let editor = vscode.window.activeTextEditor;
-  if (editor !== null) {
+  if (editor !== undefined) {
     autoHideStatusButton(editor!.document.fileName);
   }
 
@@ -57,36 +67,48 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand(
       "yuescriptrunner.compile_all_and_make_love",
       () => {
-        compileYueDirAndLove(yueTerminal);
+        compileYueDirAndLove(getTerm());
       }
     ),
     vscode.commands.registerCommand("yuescriptrunner.compile_all", () => {
-      compileYueDir(yueTerminal);
+      compileYueDir(getTerm());
     }),
     vscode.commands.registerCommand("yuescriptrunner.compile", () => {
-      compileYue(yueTerminal);
+      compileYue(getTerm());
     })
   );
 }
 
 function compileYueDirAndLove(term: vscode.Terminal): void {
+  if (vscode.window.activeTextEditor === undefined) {
+    vscode.window.showErrorMessage("YueRunner is unable to compile this!");
+    return;
+  }
   const editor = vscode.window.activeTextEditor!;
   term.show(true);
-  term.sendText(`yue ${path.dirname(editor.document.fileName)}`, true);
+  term.sendText(`yue ${path.dirname(editor.document.fileName).replaceAll("/", "\\")}`, true);
   // Check for errors? TODO.
-  term.sendText(`lovec ${path.dirname(editor.document.fileName)}`, true);
+  term.sendText(`lovec ${path.dirname(editor.document.fileName).replaceAll("/", "\\")}`, true);
 }
 
 function compileYueDir(term: vscode.Terminal): void {
+  if (vscode.window.activeTextEditor === undefined) {
+    vscode.window.showErrorMessage("YueRunner is unable to compile this!");
+    return;
+  }
   const editor = vscode.window.activeTextEditor!;
   term.show(true);
-  term.sendText(`yue ${path.dirname(editor.document.fileName)}`);
+  term.sendText(`yue ${path.dirname(editor.document.fileName.replaceAll("/", "\\"))}`);
 }
 
 function compileYue(term: vscode.Terminal): void {
+  if (vscode.window.activeTextEditor === undefined) {
+    vscode.window.showErrorMessage("YueRunner is unable to compile this!");
+    return;
+  }
   const editor = vscode.window.activeTextEditor!;
   term.show();
-  term.sendText(`yue ${editor.document.fileName}`);
+  term.sendText(`\byue ${editor.document.fileName.replaceAll("\\", "/")}`);
 }
 
 export function deactivate() {}
