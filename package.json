@@ -3,7 +3,7 @@
   "displayName": "YueRunner",
   "description": "In-editor Yuescript compilation assistant",
   "publisher": "MTLabs",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "icon": "logo.png",
   "repository": {
     "type": "git",
