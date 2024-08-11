@@ -1,19 +1,25 @@
 {
-  "name": "yuerunner",
+  "name": "yuescriptrunner",
   "displayName": "YueRunner",
-  "description": "Provides support for compiling,'debugging' and configuring yuescript codes.",
+  "description": "Provides support for compiling your yuescript codes.",
   "publisher": "MTLabs",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "icon": "logo.png",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MTadder/YueRunner.git"
+    "url": "https://github.com/MTadder/YueRunner"
   },
   "engines": {
     "vscode": "^1.92.0"
   },
   "categories": [
     "Testing"
+  ],
+  "keywords": [
+    "yuescript",
+    "yue",
+    "yue compiler",
+    "yue runner"
   ],
   "activationEvents": [
     "onLanguage:yuescript"
@@ -22,7 +28,7 @@
   "contributes": {
     "commands": [
       {
-        "command": "yuerunner.compile",
+        "command": "yuescriptrunner.compile",
         "title": "Compile this Yuescript"
       }
     ]

@@ -2,10 +2,7 @@ import * as vscode from "vscode";
 
 export function activate(context: vscode.ExtensionContext) {
   let compile_command = vscode.commands.registerCommand(
-    "yuerunner.compile",
-    () => {
-      compileYue();
-    }
+    "yuescriptrunner.compile", compileYue
   );
 
   let statusBarItem = vscode.window.createStatusBarItem(
