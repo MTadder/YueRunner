@@ -4,6 +4,9 @@ export function activate(context: vscode.ExtensionContext) {
   let compile_command = vscode.commands.registerCommand(
     "yuescriptrunner.compile", compileYue
   );
+  let compile_dir_command = vscode.commands.registerCommand(
+    "yuescriptrunner.compile_directory", compileYueDir // do yue .
+  );
 
   let statusBarItem = vscode.window.createStatusBarItem(
     vscode.StatusBarAlignment.Right
@@ -44,33 +47,39 @@ export function activate(context: vscode.ExtensionContext) {
     onEditorChanged,
     onDocSaved,
     statusBarItem,
-    compile_command
+    compile_command,
+    compile_dir_command
   );
 }
 
-function getCurrentFilePath(): string {
+function compileYueDir() {
+  vscode.window.showErrorMessage("Not supported yet. Check back tomorrow.");
+  return;
   const editor = vscode.window.activeTextEditor;
-  if (!editor) {
+  if (!editor === null) {
     vscode.window.showErrorMessage("No active editor found");
-    return "";
+    return;
   }
-  const document = editor.document;
-  return document.fileName;
+  //vscode.workspace.getWorkspaceFolder()?.uri
 }
 
 function compileYue() {
-  const file_path = getCurrentFilePath();
-  if (!file_path.endsWith(".yue")) {
+  const editor = vscode.window.activeTextEditor;
+  if (!editor === null) {
+    vscode.window.showErrorMessage("No active editor found");
+    return;
+  }
+  if (!editor!.document.fileName.endsWith(".yue")) {
     vscode.window.showErrorMessage("this file is not a .yue!");
     return;
   }
   const terminal = vscode.window.createTerminal({
     name: "Yue Compiler",
     shellPath: "yue",
-    shellArgs: [file_path],
+    shellArgs: [editor!.document.fileName],
   });
   terminal.show();
-  terminal.sendText(`yue ${file_path}`);
+  terminal.sendText(`yue ${editor!.document.fileName}`);
 }
 
 export function deactivate() {}

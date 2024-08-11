@@ -1,9 +1,9 @@
 {
   "name": "yuescriptrunner",
   "displayName": "YueRunner",
-  "description": "Provides support for compiling your yuescript codes.",
+  "description": "In-editor Yuescript compilation assistant",
   "publisher": "MTLabs",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "icon": "logo.png",
   "repository": {
     "type": "git",
