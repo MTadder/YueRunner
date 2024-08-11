@@ -23,7 +23,7 @@ for compiling any currently open `yue` script.
 
 > Help out by reporting any issues to the [Github](https://github.com/MTadder/YueRunner)
 
-- Settings pertaining to the `yue.exe` are currently unavailable.
+- Settings pertaining to `yue` are currently unavailable.
 
 ## Release Notes
 
