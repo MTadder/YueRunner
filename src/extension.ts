@@ -2,44 +2,25 @@ import * as vscode from "vscode";
 import * as path from "path";
 
 export function activate(context: vscode.ExtensionContext) {
-  let statusBarItem = vscode.window.createStatusBarItem(
+  const sbi = vscode.window.createStatusBarItem(
     vscode.StatusBarAlignment.Right,
-    256
+    32
   );
-
-  vscode.window.terminals.forEach((term) => {
-    // close all old terminals
-    if (term.name === "月Runner") {
-      term.hide();
-      term.dispose();
-    }
-  });
-
-  const yueTerminal = vscode.window.createTerminal({
-    name: "月Runner",
-  });
-
-  function getTerm(): vscode.Terminal {
-    if (yueTerminal === undefined) {
-      return vscode.window.createTerminal({
-        name: "月Runner",
-      });
-    }
-    return yueTerminal;
-  }
+  sbi.command = "yuescriptrunner.compile";
+  sbi.text = "$(zap)Compile Yuescript";
 
   let autoHideStatusButton = (fileName: string) => {
     if (fileName.endsWith(".yue")) {
-      statusBarItem.show();
+      sbi.show();
     } else {
-      statusBarItem.hide();
+      sbi.hide();
     }
   };
 
   const onEditorChanged = vscode.window.onDidChangeActiveTextEditor(
     (e: vscode.TextEditor | undefined) => {
       if (e === undefined) {
-        statusBarItem.hide();
+        sbi.hide();
         return;
       } else {
         autoHideStatusButton(e!.document.fileName);
@@ -47,14 +28,6 @@ export function activate(context: vscode.ExtensionContext) {
     }
   );
 
-  const onDocSaved = vscode.workspace.onDidSaveTextDocument(
-    (e: vscode.TextDocument) => {
-      autoHideStatusButton(e.fileName);
-    }
-  );
-
-  statusBarItem.command = "yuescriptrunner.compile";
-  statusBarItem.text = "$(zap)Compile Yuescript";
   let editor = vscode.window.activeTextEditor;
   if (editor !== undefined) {
     autoHideStatusButton(editor!.document.fileName);
@@ -62,53 +35,76 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(
     onEditorChanged,
-    onDocSaved,
-    statusBarItem,
+    sbi,
     vscode.commands.registerCommand(
       "yuescriptrunner.compile_all_and_make_love",
-      () => {
-        compileYueDirAndLove(getTerm());
-      }
+      compileYueDirAndLove
     ),
-    vscode.commands.registerCommand("yuescriptrunner.compile_all", () => {
-      compileYueDir(getTerm());
-    }),
-    vscode.commands.registerCommand("yuescriptrunner.compile", () => {
-      compileYue(getTerm());
-    })
+    vscode.commands.registerCommand(
+      "yuescriptrunner.compile_all",
+      compileYueDir
+    ),
+    vscode.commands.registerCommand("yuescriptrunner.compile", compileYue)
   );
 }
 
-function compileYueDirAndLove(term: vscode.Terminal): void {
-  if (vscode.window.activeTextEditor === undefined) {
-    vscode.window.showErrorMessage("YueRunner is unable to compile this!");
-    return;
-  }
-  const editor = vscode.window.activeTextEditor!;
-  term.show(true);
-  term.sendText(`yue ${path.dirname(editor.document.fileName).replaceAll("/", "\\")}`, true);
-  // Check for errors? TODO.
-  term.sendText(`lovec ${path.dirname(editor.document.fileName).replaceAll("/", "\\")}`, true);
-}
-
-function compileYueDir(term: vscode.Terminal): void {
-  if (vscode.window.activeTextEditor === undefined) {
-    vscode.window.showErrorMessage("YueRunner is unable to compile this!");
-    return;
-  }
-  const editor = vscode.window.activeTextEditor!;
-  term.show(true);
-  term.sendText(`yue ${path.dirname(editor.document.fileName.replaceAll("/", "\\"))}`);
-}
-
-function compileYue(term: vscode.Terminal): void {
-  if (vscode.window.activeTextEditor === undefined) {
-    vscode.window.showErrorMessage("YueRunner is unable to compile this!");
-    return;
-  }
-  const editor = vscode.window.activeTextEditor!;
+function getTerminal(): vscode.Terminal {
+  vscode.window.terminals.forEach((term) => {
+    // close all inactive 月Runner terminals
+    if (term.name === "YueRunner") {
+      // if (term.exitCode === undefined) {
+      //   term.show();
+      //   return term;
+      // }
+      term.hide();
+      term.sendText("exit");
+      term.dispose();
+    }
+  });
+  const term = vscode.window.createTerminal({
+    name: "YueRunner",
+  });
   term.show();
-  term.sendText(`\byue ${editor.document.fileName.replaceAll("\\", "/")}`);
+  return term;
+}
+
+function getFileRootPath(fromFilePath: string): string {
+  return path.dirname(fromFilePath.replaceAll("\\", "/"));
+}
+function assertTextEditor() {
+  const cantCompileMessage: string =
+    "$(warning)YueRunner is unable to compile this";
+  if (vscode.window.activeTextEditor === undefined) {
+    vscode.window.showErrorMessage(cantCompileMessage);
+    return;
+  }
+}
+
+// TODO: Allow support for having a non-yue file open,
+// and still be able to use this command, only if there exists
+// more than 0 yuescripts in the parent directory.
+function compileYueDirAndLove(): void {
+  assertTextEditor();
+  const editor = vscode.window.activeTextEditor!;
+  const term = getTerminal();
+  term.sendText("\byue " + getFileRootPath(editor.document.fileName), true);
+  term.sendText("\blovec " + getFileRootPath(editor.document.fileName), true);
+  // Check for errors? TODO.
+}
+
+// Also to this.
+function compileYueDir(): void {
+  assertTextEditor();
+  const editor = vscode.window.activeTextEditor!;
+  const term = getTerminal();
+  term.sendText("\byue " + getFileRootPath(editor.document.fileName));
+}
+
+function compileYue(): void {
+  assertTextEditor();
+  const editor = vscode.window.activeTextEditor!;
+  const term = getTerminal();
+  term.sendText("\byue " + editor.document.fileName.replaceAll("\\", "/"));
 }
 
 export function deactivate() {}
