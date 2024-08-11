@@ -65,7 +65,7 @@ function compileYueDir() {
 
 function compileYue() {
   const editor = vscode.window.activeTextEditor;
-  if (!editor === null) {
+  if (editor === null) {
     vscode.window.showErrorMessage("No active editor found");
     return;
   }
