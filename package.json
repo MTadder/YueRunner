@@ -7,7 +7,7 @@
   "icon": "logo.png",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/MTadder/YueRunner.git"
   },
   "engines": {
     "vscode": "^1.92.0"
