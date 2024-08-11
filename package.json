@@ -3,7 +3,7 @@
   "displayName": "YueRunner",
   "description": "In-editor Yuescript compilation assistant",
   "publisher": "MTLabs",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "icon": "logo.png",
   "repository": {
     "type": "git",
@@ -30,8 +30,24 @@
       {
         "command": "yuescriptrunner.compile",
         "title": "Compile this Yuescript"
+      },
+      {
+        "command": "yuescriptrunner.compile_all",
+        "title": "Compile all Yuescripts (in this directory)"
+      },
+      {
+        "command": "yuescriptrunner.compile_all_and_make_love",
+        "title": "Compile all Yuescripts & run LÖVE2D (in this directory)"
       }
-    ]
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "yuescriptrunner.compile",
+          "when": "editorLangId == yuescript"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
