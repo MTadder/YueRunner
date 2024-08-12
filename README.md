@@ -1,6 +1,6 @@
 <center>
 
-# 月Runner
+# 月 Runner
 
 ###### (yuescriptrunner)
 
@@ -37,7 +37,15 @@ for compiling any currently open `yue` script.
 
 ## Extension Settings
 
-- `yuescriptrunner.useMinification`: `boolean`
+- `yuescriptrunner.targetLuaVersion` = ``
+    - `anyOf: ["5.1", "5.2", "5.3", "5.4"]`
+- `yuescriptrunner.useMinification`
+- `yuescriptrunner.useSpacesInstead`
+- `yuescriptrunner.reserveComments`
+- `yuescriptrunner.writeLineNumbers`
+- `yuescriptrunner.dumpCompileTime`
+- `yuescriptrunner.useImplicitReturn`
+- `yuescriptrunner.matchLineNumbers`
 
 ## Known Issues
 

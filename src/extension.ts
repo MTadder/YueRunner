@@ -76,20 +76,38 @@ function getTerminal(
   return term;
 }
 function getAddedArgs(): string {
-  const config = vscode.workspace.getConfiguration();
-  const useMinification: boolean =
-    config.get("yuescriptrunner.useMinification") ?? false;
-  const useSpecificLuaVersion: string =
-    config.get("yuescriptrunner.targetLuaVersion") ?? "";
-  if (useSpecificLuaVersion.length === 0 && useMinification === false) {
-    return "";
-  }
   var args: string = "";
-  if (useMinification) {
+  const config = vscode.workspace.getConfiguration();
+  if (config.get("yuescriptrunner.useMinification") ?? false) {
     args += "-m ";
   }
-  if (["5.1", "5.2", "5.3", "5.4"].includes(useSpecificLuaVersion)) {
-    args += ("--target-version=" + useSpecificLuaVersion + " ");
+  const useTargetLuaVersion: string =
+    config.get("yuescriptrunner.targetLuaVersion") ?? "";
+  if (["5.1", "5.2", "5.3", "5.4"].includes(useTargetLuaVersion)) {
+    args += "--target-version=" + useTargetLuaVersion + " ";
+  } else if (useTargetLuaVersion.length !== 0) {
+    vscode.window.showWarningMessage(
+      "Unknown Lua version: " + useTargetLuaVersion
+    );
+  }
+  // there is a better way to do this.
+  if (config.get("yuescriptrunner.useSpacesInstead") ?? false) {
+    args += "-s ";
+  }
+  if (config.get("yuescriptrunner.reserveComments") ?? false) {
+    args += "-c ";
+  }
+  if (config.get("yuescriptrunner.writeLineNumbers") ?? false) {
+    args += "-l ";
+  }
+  if (config.get("yuescriptrunner.dumpCompileTime") ?? false) {
+    args += "-b ";
+  }
+  if ((config.get("yuescriptrunner.useImplicitReturn") ?? true) === false) {
+    args += "-j ";
+  }
+  if (config.get("yuescriptrunner.matchLineNumbers") ?? false) {
+    args += "-r ";
   }
   return args;
 }
@@ -97,8 +115,7 @@ function getFileRootPath(fromFilePath: string): string {
   return path.dirname(fromFilePath.replaceAll("\\", "/"));
 }
 function assertTextEditor() {
-  const cantCompileMessage: string =
-    "$(warning)月Runner is unable to compile this";
+  const cantCompileMessage: string = "月Runner is unable to compile this";
   if (vscode.window.activeTextEditor === undefined) {
     vscode.window.showErrorMessage(cantCompileMessage);
     return;
