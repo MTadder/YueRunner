@@ -37,15 +37,15 @@ for compiling any currently open `yue` script.
 
 ## Extension Settings
 
-- None yet...
+- `yuescriptrunner.useMinification`: `boolean`
 
 ## Known Issues
 
 > Help out by reporting any issues to the [Github](https://github.com/MTadder/YueRunner)
 
-- Settings pertaining to `yue` *are currently unavailable*.
-- If *you try to use `LÖVE2D` without it being installed*, an error will occur.
-- If *you change your default shell profile* while a `yue` script is open, the status bar button will disappear, **until you reopen the tab**.
+- Many settings pertaining to `yue` _are currently unavailable_.
+- If _you try to use `LÖVE2D` without it being installed_, an error will occur.
+- If _you change your default shell profile_ while a `yue` script is open, the status bar button will disappear, **until you reopen the tab**.
 
 ---
 

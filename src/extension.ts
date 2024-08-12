@@ -77,7 +77,7 @@ function getTerminal(
 }
 function getAddedArgs(): string {
   const useMinification: boolean =
-    vscode.workspace.getConfiguration().get("yuescriptrunner.useMini") ?? false;
+    vscode.workspace.getConfiguration().get("yuescriptrunner.useMinification") ?? false;
   if (useMinification === false) {
     return "";
   }

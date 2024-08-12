@@ -1,6 +1,6 @@
 {
   "name": "yuescriptrunner",
-  "displayName": "YueRunner",
+  "displayName": "月Runner",
   "description": "In-editor Yuescript compilation assistant",
   "publisher": "MTLabs",
   "version": "0.0.8",
@@ -30,10 +30,10 @@
     "configuration": {
       "title": "月Runner Configuration",
       "properties": {
-        "yuescriptrunner.useMini": {
+        "yuescriptrunner.useMinification": {
           "type": "boolean",
           "default": false,
-          "description": "Enable or disable minification"
+          "description": "Enable or disable Minification during compilation"
         }
       }
     },
