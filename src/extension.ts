@@ -59,7 +59,9 @@ export function activate(context: vscode.ExtensionContext) {
   );
 }
 
-function getTerminal(availableTerminals: readonly vscode.Terminal[]): vscode.Terminal {
+function getTerminal(
+  availableTerminals: readonly vscode.Terminal[]
+): vscode.Terminal {
   for (let i = 0; i < availableTerminals.length; i++) {
     const term = availableTerminals[i];
     if (term.name === terminalName) {
@@ -73,7 +75,18 @@ function getTerminal(availableTerminals: readonly vscode.Terminal[]): vscode.Ter
   term.show();
   return term;
 }
-
+function getAddedArgs(): string {
+  const useMinification: boolean =
+    vscode.workspace.getConfiguration().get("yuescriptrunner.useMini") ?? false;
+  if (useMinification === false) {
+    return "";
+  }
+  var args: string = "";
+  if (useMinification) {
+    args += "-m ";
+  }
+  return args;
+}
 function getFileRootPath(fromFilePath: string): string {
   return path.dirname(fromFilePath.replaceAll("\\", "/"));
 }
@@ -94,7 +107,13 @@ function compileYueDirAndLove(): void {
   const editor = vscode.window.activeTextEditor!;
   const term = getTerminal(vscode.window.terminals);
   term.sendText("\byue " + getFileRootPath(editor.document.fileName), true);
-  term.sendText("\blovec " + getFileRootPath(editor.document.fileName), true);
+  term.sendText(
+    "\blovec " +
+      getFileRootPath(editor.document.fileName) +
+      " " +
+      getAddedArgs(),
+    true
+  );
   // Check for errors? TODO.
 }
 
@@ -103,14 +122,21 @@ function compileYueDir(): void {
   assertTextEditor();
   const editor = vscode.window.activeTextEditor!;
   const term = getTerminal(vscode.window.terminals);
-  term.sendText("\byue " + getFileRootPath(editor.document.fileName));
+  term.sendText(
+    "\byue " + getFileRootPath(editor.document.fileName) + " " + getAddedArgs()
+  );
 }
 
 function compileYue(): void {
   assertTextEditor();
   const editor = vscode.window.activeTextEditor!;
   const term = getTerminal(vscode.window.terminals);
-  term.sendText("\byue " + editor.document.fileName.replaceAll("\\", "/"));
+  term.sendText(
+    "\byue " +
+      editor.document.fileName.replaceAll("\\", "/") +
+      " " +
+      getAddedArgs()
+  );
 }
 
 export function deactivate() {}

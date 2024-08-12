@@ -7,7 +7,7 @@
   "icon": "logo.png",
   "repository": {
     "type": "git",
-    "url": "https://github.com/MTadder/YueRunner"
+    "url": "https://github.com/MTadder/YueRunner.git"
   },
   "engines": {
     "vscode": "^1.92.0"
@@ -27,6 +27,16 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "configuration": {
+      "title": "月Runner Configuration",
+      "properties": {
+        "yuescriptrunner.useMini": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable or disable minification"
+        }
+      }
+    },
     "commands": [
       {
         "command": "yuescriptrunner.compile",
