@@ -76,14 +76,20 @@ function getTerminal(
   return term;
 }
 function getAddedArgs(): string {
+  const config = vscode.workspace.getConfiguration();
   const useMinification: boolean =
-    vscode.workspace.getConfiguration().get("yuescriptrunner.useMinification") ?? false;
-  if (useMinification === false) {
+    config.get("yuescriptrunner.useMinification") ?? false;
+  const useSpecificLuaVersion: string =
+    config.get("yuescriptrunner.targetLuaVersion") ?? "";
+  if (useSpecificLuaVersion.length === 0 && useMinification === false) {
     return "";
   }
   var args: string = "";
   if (useMinification) {
     args += "-m ";
+  }
+  if (["5.1", "5.2", "5.3", "5.4"].includes(useSpecificLuaVersion)) {
+    args += ("--target-version=" + useSpecificLuaVersion + " ");
   }
   return args;
 }

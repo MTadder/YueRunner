@@ -3,7 +3,7 @@
   "displayName": "月Runner",
   "description": "In-editor Yuescript compilation assistant",
   "publisher": "MTLabs",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "icon": "logo.png",
   "repository": {
     "type": "git",
@@ -34,6 +34,14 @@
           "type": "boolean",
           "default": false,
           "description": "Enable or disable Minification during compilation"
+        },
+        "yuescriptrunner.targetLuaVersion": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": "null",
+          "description": "Specify the Lua version the compiler will target (5.1, 5.2, 5.3 or 5.4)"
         }
       }
     },
