@@ -129,9 +129,17 @@ function compileYueDirAndLove(): void {
   assertTextEditor();
   const editor = vscode.window.activeTextEditor!;
   const term = getTerminal(vscode.window.terminals);
-  term.sendText("\byue " + getFileRootPath(editor.document.fileName), true);
+
+  const config = vscode.workspace.getConfiguration();
+  const loveExe = config.get("yuescriptrunner.loveExecutable") ?? "lovec";
+
   term.sendText(
-    "\blovec " +
+    "\byue " + getFileRootPath(editor.document.fileName) + " " + getAddedArgs(),
+    true
+  );
+  term.sendText(
+    "\b" +
+      loveExe +
       getFileRootPath(editor.document.fileName) +
       " " +
       getAddedArgs(),

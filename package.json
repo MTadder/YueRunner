@@ -65,6 +65,15 @@
           "default": false,
           "description": "Rewrite output to match original line numbers?"
         },
+        "yuescriptrunner.loveExecutable": {
+          "enum": [
+						"love", "lovec"
+					],
+          "type": "string",
+          "default": "lovec",
+          "description": "Specify the LÖVE executable to use.",
+          "title": "LÖVE executable"
+        },
         "yuescriptrunner.targetLuaVersion": {
           "enum": [
 						"5.1", "5.2", "5.3", "5.4"
