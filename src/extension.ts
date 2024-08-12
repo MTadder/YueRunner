@@ -140,6 +140,7 @@ function compileYueDirAndLove(): void {
   term.sendText(
     "\b" +
       loveExe +
+      " " +
       getFileRootPath(editor.document.fileName) +
       " " +
       getAddedArgs(),
