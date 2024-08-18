@@ -3,7 +3,7 @@
   "displayName": "月Runner",
   "description": "In-editor Yuescript compilation assistant",
   "publisher": "MTLabs",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "icon": "logo.png",
   "repository": {
     "type": "git",
@@ -71,8 +71,7 @@
 					],
           "type": "string",
           "default": "lovec",
-          "description": "Specify the LÖVE executable to use.",
-          "title": "LÖVE executable"
+          "description": "LÖVE executable to use."
         },
         "yuescriptrunner.targetLuaVersion": {
           "enum": [
@@ -80,7 +79,7 @@
 					],
           "type": "string",
           "default": "5.4",
-          "description": "Specify the Lua version that the compiler will target."
+          "description": "Lua version the compiler will target."
         }
       }
     },

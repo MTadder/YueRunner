@@ -75,6 +75,7 @@ function getTerminal(
   term.show();
   return term;
 }
+
 function getAddedArgs(): string {
   var args: string = "";
   const config = vscode.workspace.getConfiguration();
@@ -83,12 +84,8 @@ function getAddedArgs(): string {
   }
   const useTargetLuaVersion: string =
     config.get("yuescriptrunner.targetLuaVersion") ?? "";
-  if (["5.1", "5.2", "5.3", "5.4"].includes(useTargetLuaVersion)) {
+  if (useTargetLuaVersion !== "") {
     args += "--target-version=" + useTargetLuaVersion + " ";
-  } else if (useTargetLuaVersion.length !== 0) {
-    vscode.window.showWarningMessage(
-      "Unknown Lua version: " + useTargetLuaVersion
-    );
   }
   // there is a better way to do this.
   if (config.get("yuescriptrunner.useSpacesInstead") ?? false) {
@@ -111,9 +108,11 @@ function getAddedArgs(): string {
   }
   return args;
 }
+
 function getFileRootPath(fromFilePath: string): string {
   return path.dirname(fromFilePath.replaceAll("\\", "/"));
 }
+
 function assertTextEditor() {
   const cantCompileMessage: string = "月Runner is unable to compile this";
   if (vscode.window.activeTextEditor === undefined) {

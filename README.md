@@ -37,8 +37,7 @@ for compiling any currently open `yue` script.
 
 ## Extension Settings
 
-- `yuescriptrunner.targetLuaVersion` = ``
-    - `anyOf: ["5.1", "5.2", "5.3", "5.4"]`
+- `yuescriptrunner.targetLuaVersion`
 - `yuescriptrunner.useMinification`
 - `yuescriptrunner.useSpacesInstead`
 - `yuescriptrunner.reserveComments`
@@ -46,12 +45,12 @@ for compiling any currently open `yue` script.
 - `yuescriptrunner.dumpCompileTime`
 - `yuescriptrunner.useImplicitReturn`
 - `yuescriptrunner.matchLineNumbers`
+- `yuescriptrunner.loveExecutable`
 
 ## Known Issues
 
 > Help out by reporting any issues to the [Github](https://github.com/MTadder/YueRunner)
 
-- Many settings pertaining to `yue` _are currently unavailable_.
 - If _you try to use `LÖVE2D` without it being installed_, an error will occur.
 - If _you change your default shell profile_ while a `yue` script is open, the status bar button will disappear, **until you reopen the tab**.
 
