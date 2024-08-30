@@ -1,7 +1,7 @@
 {
   "name": "yuescriptrunner",
   "displayName": "月Runner",
-  "description": "In-editor Yuescript compilation assistant",
+  "description": "in-editor Yuescript compilation assistant",
   "publisher": "MTLabs",
   "version": "0.0.11",
   "icon": "logo.png",

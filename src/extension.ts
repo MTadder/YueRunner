@@ -10,7 +10,6 @@ export function activate(context: vscode.ExtensionContext) {
   );
   sbi.command = "yuescriptrunner.compile";
   sbi.text = "$(zap)Compile Yuescript";
-
   let autoHideStatusButton = (fileName: string) => {
     if (fileName.endsWith(".yue")) {
       sbi.show();
@@ -18,7 +17,6 @@ export function activate(context: vscode.ExtensionContext) {
       sbi.hide();
     }
   };
-
   const onEditorChanged = vscode.window.onDidChangeActiveTextEditor(
     (e: vscode.TextEditor | undefined) => {
       if (e === undefined) {
@@ -29,21 +27,18 @@ export function activate(context: vscode.ExtensionContext) {
       }
     }
   );
-
   let editor = vscode.window.activeTextEditor;
   if (editor !== undefined) {
     autoHideStatusButton(editor!.document.fileName);
   }
-
   vscode.window.terminals.forEach((term) => {
-    // close any old 月Runner terminals.
+    // close any old terminals.
     if (term.name === terminalName) {
       term.hide();
       term.sendText("exit");
       term.dispose();
     }
   });
-
   context.subscriptions.push(
     onEditorChanged,
     sbi,
@@ -58,7 +53,6 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand("yuescriptrunner.compile", compileYue)
   );
 }
-
 function getTerminal(
   availableTerminals: readonly vscode.Terminal[]
 ): vscode.Terminal {
@@ -75,7 +69,6 @@ function getTerminal(
   term.show();
   return term;
 }
-
 function getAddedArgs(): string {
   var args: string = "";
   const config = vscode.workspace.getConfiguration();
@@ -87,7 +80,7 @@ function getAddedArgs(): string {
   if (useTargetLuaVersion !== "") {
     args += "--target-version=" + useTargetLuaVersion + " ";
   }
-  // there is a better way to do this.
+  // there is a better way to do this. hmmm...
   if (config.get("yuescriptrunner.useSpacesInstead") ?? false) {
     args += "-s ";
   }
@@ -108,11 +101,9 @@ function getAddedArgs(): string {
   }
   return args;
 }
-
 function getFileRootPath(fromFilePath: string): string {
   return path.dirname(fromFilePath.replaceAll("\\", "/"));
 }
-
 function assertTextEditor() {
   const cantCompileMessage: string = "月Runner is unable to compile this";
   if (vscode.window.activeTextEditor === undefined) {
@@ -120,18 +111,17 @@ function assertTextEditor() {
     return;
   }
 }
-
 // TODO: Allow support for having a non-yue file open,
 // and still be able to use this command, only if there exists
 // more than 0 yuescripts in the parent directory.
+// TODO: Also, there should be an option for only running LOVE,
+// optionally skipping the compilation step.
 function compileYueDirAndLove(): void {
   assertTextEditor();
   const editor = vscode.window.activeTextEditor!;
   const term = getTerminal(vscode.window.terminals);
-
   const config = vscode.workspace.getConfiguration();
   const loveExe = config.get("yuescriptrunner.loveExecutable") ?? "lovec";
-
   term.sendText(
     "\byue " + getFileRootPath(editor.document.fileName) + " " + getAddedArgs(),
     true
@@ -147,8 +137,6 @@ function compileYueDirAndLove(): void {
   );
   // Check for errors? TODO.
 }
-
-// Also to this.
 function compileYueDir(): void {
   assertTextEditor();
   const editor = vscode.window.activeTextEditor!;
@@ -157,7 +145,6 @@ function compileYueDir(): void {
     "\byue " + getFileRootPath(editor.document.fileName) + " " + getAddedArgs()
   );
 }
-
 function compileYue(): void {
   assertTextEditor();
   const editor = vscode.window.activeTextEditor!;
@@ -169,5 +156,4 @@ function compileYue(): void {
       getAddedArgs()
   );
 }
-
 export function deactivate() {}
