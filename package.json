@@ -55,7 +55,7 @@
           "default": false,
           "description": "Dump global variables used in NAME LINE COLUMN"
         },
-        "yuescriptrunner.stdout": {
+        "yuescriptrunner.dumpToStdout": {
           "type": "boolean",
           "default": false,
           "description": "Dump output to standard out?"

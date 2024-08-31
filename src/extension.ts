@@ -76,7 +76,7 @@ function getAddedArgs(): string {
   if (config.get("yuescriptrunner.dumpGlobals") ?? false) {
     args += "-g ";
   }
-  if (config.get("yuescriptrunner.stdout")) {
+  if (config.get("yuescriptrunner.dumpToStdout")) {
     args += "-p ";
   }
   const useTargetLuaVersion: string =
