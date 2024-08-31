@@ -37,6 +37,8 @@ for compiling any currently open `yue` script.
 
 ## Extension Settings
 
+- `yuescriptrunner.dumpGlobals` 
+- `yuescriptrunner.stdout` 
 - `yuescriptrunner.targetLuaVersion`
 - `yuescriptrunner.useMinification`
 - `yuescriptrunner.useSpacesInstead`

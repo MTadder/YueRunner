@@ -73,6 +73,12 @@ function getAddedArgs(): string {
   if (config.get("yuescriptrunner.useMinification") ?? false) {
     args += "-m ";
   }
+  if (config.get("yuescriptrunner.dumpGlobals") ?? false) {
+    args += "-g ";
+  }
+  if (config.get("yuescriptrunner.stdout")) {
+    args += "-p ";
+  }
   const useTargetLuaVersion: string =
     config.get("yuescriptrunner.targetLuaVersion") ?? "";
   if (useTargetLuaVersion !== "") {

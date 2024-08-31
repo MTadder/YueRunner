@@ -48,12 +48,22 @@
         "yuescriptrunner.writeLineNumbers": {
           "type": "boolean",
           "default": false,
-          "description": "Write line numbers from the yue source file?"
+          "description": "Write line numbers from the yue source?"
+        },
+        "yuescriptrunner.dumpGlobals": {
+          "type": "boolean",
+          "default": false,
+          "description": "Dump global variables used in NAME LINE COLUMN"
+        },
+        "yuescriptrunner.stdout": {
+          "type": "boolean",
+          "default": false,
+          "description": "Dump output to standard out?"
         },
         "yuescriptrunner.dumpCompileTime": {
           "type": "boolean",
           "default": false,
-          "description": "Only dump compile time? (doesn't write files!)"
+          "description": "Dump compile time duration?"
         },
         "yuescriptrunner.useImplicitReturn": {
           "type": "boolean",
@@ -63,7 +73,7 @@
         "yuescriptrunner.matchLineNumbers": {
           "type": "boolean",
           "default": false,
-          "description": "Rewrite output to match original line numbers?"
+          "description": "Rewrite output to match line numbers?"
         },
         "yuescriptrunner.loveExecutable": {
           "enum": [
