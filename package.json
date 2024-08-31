@@ -48,7 +48,7 @@
         "yuescriptrunner.writeLineNumbers": {
           "type": "boolean",
           "default": false,
-          "description": "Write line numbers from the source code? (doesn't write files!)"
+          "description": "Write line numbers from the yue source file?"
         },
         "yuescriptrunner.dumpCompileTime": {
           "type": "boolean",

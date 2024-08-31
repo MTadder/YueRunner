@@ -32,7 +32,7 @@ export function activate(context: vscode.ExtensionContext) {
     autoHideStatusButton(editor!.document.fileName);
   }
   vscode.window.terminals.forEach((term) => {
-    // close any old terminals.
+    // close old terminals.
     if (term.name === terminalName) {
       term.hide();
       term.sendText("exit");
@@ -54,18 +54,16 @@ export function activate(context: vscode.ExtensionContext) {
   );
 }
 function getTerminal(
-  availableTerminals: readonly vscode.Terminal[]
+  available: readonly vscode.Terminal[]
 ): vscode.Terminal {
-  for (let i = 0; i < availableTerminals.length; i++) {
-    const term = availableTerminals[i];
+  for (let i = 0; i < available.length; i++) {
+    const term = available[i];
     if (term.name === terminalName) {
       term.show();
       return term;
     }
   }
-  const term = vscode.window.createTerminal({
-    name: terminalName,
-  });
+  const term = vscode.window.createTerminal({ name: terminalName });
   term.show();
   return term;
 }
@@ -101,13 +99,13 @@ function getAddedArgs(): string {
   }
   return args;
 }
-function getFileRootPath(fromFilePath: string): string {
-  return path.dirname(fromFilePath.replaceAll("\\", "/"));
+function getFileRootPath(file_path: string): string {
+  return path.dirname(file_path.replaceAll("\\", "/"));
 }
 function assertTextEditor() {
-  const cantCompileMessage: string = "月Runner is unable to compile this";
+  const err_message: string = terminalName+" is unable to compile this";
   if (vscode.window.activeTextEditor === undefined) {
-    vscode.window.showErrorMessage(cantCompileMessage);
+    vscode.window.showErrorMessage(err_message);
     return;
   }
 }
