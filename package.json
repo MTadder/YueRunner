@@ -104,7 +104,7 @@
       },
       {
         "command": "yuescriptrunner.compile_all_and_make_love",
-        "title": "Compile all Yuescripts & run LÖVE2D (in this directory)"
+        "title": "Compile all Yuescripts & run LOVE2D (in this directory)"
       }
     ],
     "menus": {

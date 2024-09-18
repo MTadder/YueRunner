@@ -43,7 +43,7 @@ export function activate(context: vscode.ExtensionContext) {
     onEditorChanged,
     sbi,
     vscode.commands.registerCommand(
-      "yuescriptrunner.compile_all_and_make_love",
+      "yuescriptrunner.compile_all_and_run_love",
       compileYueDirAndLove
     ),
     vscode.commands.registerCommand(

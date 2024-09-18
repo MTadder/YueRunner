@@ -1,9 +1,6 @@
-<center>
-
 # YueRunner
 
-###### (yuescriptrunner)
-
+<center>
 <img src="logo.ico" width=128 height=128>
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/MTadder/YueRunner?style=flat-square)
@@ -19,7 +16,7 @@
 provides palette commands, and a status bar button
 for compiling any currently open `yue` script.
 
-### Commands:
+### Commands
 
 > Open your command palette with `CTRL` + `SHIFT` + `P`
 
@@ -37,8 +34,8 @@ for compiling any currently open `yue` script.
 
 ## Extension Settings
 
-- `yuescriptrunner.dumpGlobals` 
-- `yuescriptrunner.dumpToStdout` 
+- `yuescriptrunner.dumpGlobals`
+- `yuescriptrunner.dumpToStdout`
 - `yuescriptrunner.targetLuaVersion`
 - `yuescriptrunner.useMinification`
 - `yuescriptrunner.useSpacesInstead`
