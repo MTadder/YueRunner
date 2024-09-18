@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import * as path from "path";
 
-const terminalName = "YuescriptRunner";
+const terminalName = "YueRunner";
 
 export function activate(context: vscode.ExtensionContext) {
   const sbi = vscode.window.createStatusBarItem(

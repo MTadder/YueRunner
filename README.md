@@ -1,6 +1,6 @@
 <center>
 
-# 月 Runner
+# YueRunner
 
 ###### (yuescriptrunner)
 
@@ -29,7 +29,7 @@ for compiling any currently open `yue` script.
 
 ## Requirements
 
-- Install [`月 yuescript`](https://yuescript.org)
+- Install [`yuescript`](https://yuescript.org)
 
 - Ensure that `yue` is visible within your `PATH`.
 
