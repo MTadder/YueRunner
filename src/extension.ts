@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import * as path from "path";
 
-const terminalName = "月Runner";
+const terminalName = "YuescriptRunner";
 
 export function activate(context: vscode.ExtensionContext) {
   const sbi = vscode.window.createStatusBarItem(
@@ -53,9 +53,12 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand("yuescriptrunner.compile", compileYue)
   );
 }
-function getTerminal(
-  available: readonly vscode.Terminal[]
-): vscode.Terminal {
+/**
+ * Returns the current YuescriptRunner Terminal.
+ * @param available array of currently available terminals
+ * @returns
+ */
+function getTerminal(available: readonly vscode.Terminal[]): vscode.Terminal {
   for (let i = 0; i < available.length; i++) {
     const term = available[i];
     if (term.name === terminalName) {
@@ -63,7 +66,9 @@ function getTerminal(
       return term;
     }
   }
-  const term = vscode.window.createTerminal({ name: terminalName });
+  const term = vscode.window.createTerminal({
+    name: terminalName,
+  });
   term.show();
   return term;
 }
@@ -109,7 +114,7 @@ function getFileRootPath(file_path: string): string {
   return path.dirname(file_path.replaceAll("\\", "/"));
 }
 function assertTextEditor() {
-  const err_message: string = terminalName+" is unable to compile this";
+  const err_message: string = terminalName + " is unable to compile this";
   if (vscode.window.activeTextEditor === undefined) {
     vscode.window.showErrorMessage(err_message);
     return;
@@ -125,14 +130,13 @@ function compileYueDirAndLove(): void {
   const editor = vscode.window.activeTextEditor!;
   const term = getTerminal(vscode.window.terminals);
   const config = vscode.workspace.getConfiguration();
-  const loveExe = config.get("yuescriptrunner.loveExecutable") ?? "lovec";
   term.sendText(
     "\byue " + getFileRootPath(editor.document.fileName) + " " + getAddedArgs(),
     true
   );
   term.sendText(
     "\b" +
-      loveExe +
+      ((config.get("yuescriptrunner.loveExecutable") as string) ?? "lovec") +
       " " +
       getFileRootPath(editor.document.fileName) +
       " " +
@@ -143,17 +147,17 @@ function compileYueDirAndLove(): void {
 }
 function compileYueDir(): void {
   assertTextEditor();
-  const editor = vscode.window.activeTextEditor!;
-  const term = getTerminal(vscode.window.terminals);
-  term.sendText(
-    "\byue " + getFileRootPath(editor.document.fileName) + " " + getAddedArgs()
+  getTerminal(vscode.window.terminals).sendText(
+    "\byue " +
+      getFileRootPath(vscode.window.activeTextEditor!.document.fileName) +
+      " " +
+      getAddedArgs()
   );
 }
 function compileYue(): void {
   assertTextEditor();
   const editor = vscode.window.activeTextEditor!;
-  const term = getTerminal(vscode.window.terminals);
-  term.sendText(
+  getTerminal(vscode.window.terminals).sendText(
     "\byue " +
       editor.document.fileName.replaceAll("\\", "/") +
       " " +
