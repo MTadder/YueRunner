@@ -4,12 +4,11 @@ import * as path from "path";
 const terminalName = "YueRunner";
 
 export function activate(context: vscode.ExtensionContext) {
-  const config = vscode.workspace.getConfiguration();
   const sbi = vscode.window.createStatusBarItem(
     vscode.StatusBarAlignment.Right,
     32
   );
-  sbi.text = "$(zap)Compile Yuescript";
+  //sbi.text = "$(zap)Compile Yuescript";
   sbi.command = ("yuescriptrunner.compile");
   let autoHideStatusButton = (fileName: string) => {
     if (fileName.endsWith(".yue")) {
@@ -19,27 +18,42 @@ export function activate(context: vscode.ExtensionContext) {
       return;
     }
   };
-
-  // const onConfigChanged = vscode.workspace.onDidChangeConfiguration((e) => {
-  //   let operation = (config.get("yuescriptrunner.defaultAction") ?? "compile");
-  //   sbi.command = ("yuescriptrunner." + operation);
-  //   switch (operation) {
-  //     case "compile":
-  //       sbi.text = "$(zap)Compile Yuescript";
-  //       break;
-  //     case "execute":
-  //       sbi.text = "$(zap)Execute Yuescript";
-  //       break;
-  //     case "compile_all":
-  //       sbi.text = "$(zap)Compile all Yuescripts";
-  //       break;
-  //     case "compile_all_and_run_love":
-  //       sbi.text = "$(zap)Compile & run LOVE";
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // });
+  const onConfigChanged = vscode.workspace.onDidChangeConfiguration((e) => {
+    let operation: string = (
+      vscode.workspace.getConfiguration().get("yuescriptrunner.defaultAction") ?? "Compile"
+    );
+    let icon_only: boolean = (
+      vscode.workspace.getConfiguration().get("yuescriptrunner.iconOnly") ?? false
+    );
+    switch (operation) {
+      case "Run":
+        sbi.text = (icon_only ? "$(run)" : "$(run)Run Yuescript");
+        sbi.command = ("yuescriptrunner.run");
+        break;
+      case "Compile":
+        sbi.text = (icon_only ? "$(zap)" : "$(zap)Compile Yuescript");
+        sbi.command = ("yuescriptrunner.compile");
+        break;
+      case "Compile All":
+        sbi.text = (icon_only ? "$(zap)" : "$(zap)Compile all Yuescripts");
+        sbi.command = ("yuescriptrunner.compile_all");
+        break;
+      case "Compile All and Run LÖVE":
+        sbi.text = (icon_only ? "$(run-all)" : "$(run-all)Compile & run LÖVE");
+        sbi.command = ("yuescriptrunner.compile_all_and_run_love");
+        break;
+      default:
+        break;
+    }
+    // switch (text_mode) {
+    //   case "Brief":
+    //     sbi.text += "Compile all Yuescripts";
+    //     break;
+    
+    //   default:
+    //     break;
+    // }
+  });
   const onEditorChanged = vscode.window.onDidChangeActiveTextEditor(
     (e: vscode.TextEditor | undefined) => {
       if (e === undefined) {
@@ -63,7 +77,7 @@ export function activate(context: vscode.ExtensionContext) {
     }
   });
   context.subscriptions.push(
-    //onConfigChanged,
+    onConfigChanged,
     onEditorChanged,
     sbi,
     vscode.commands.registerCommand(

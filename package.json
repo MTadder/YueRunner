@@ -3,7 +3,7 @@
   "displayName": "YueRunner",
   "description": "in-editor Yuescript compilation assistant",
   "publisher": "MTLabs",
-  "version": "0.0.13",
+  "version": "0.1.14",
   "icon": "logo.png",
   "repository": {
     "type": "git",
@@ -75,6 +75,11 @@
           "default": false,
           "description": "Rewrite output to match line numbers?"
         },
+        "yuescriptrunner.iconOnly": {
+          "type": "boolean",
+          "default": false,
+          "description": "Only show the icon on the button?"
+        },
         "yuescriptrunner.loveExecutable": {
           "enum": [
 						"love", "lovec"
@@ -85,10 +90,10 @@
         },
         "yuescriptrunner.defaultAction": {
           "enum": [
-						"compile", "compile_all", "execute", "compile_all_and_run_love"
+						"Compile", "Compile All", "Run", "Compile All and Run LÖVE"
 					],
           "type": "string",
-          "default": "compile",
+          "default": "Run",
           "description": "Default action displayed on the status bar."
         },
         "yuescriptrunner.targetLuaVersion": {
@@ -116,7 +121,7 @@
       },
       {
         "command": "yuescriptrunner.compile_all_and_run_love",
-        "title": "Compile all Yuescripts & run LOVE2D (in this directory)"
+        "title": "Compile all Yuescripts & Run LOVE2D (in this directory)"
       }
     ],
     "menus": {
