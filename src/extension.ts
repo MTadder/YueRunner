@@ -4,19 +4,42 @@ import * as path from "path";
 const terminalName = "YueRunner";
 
 export function activate(context: vscode.ExtensionContext) {
+  const config = vscode.workspace.getConfiguration();
   const sbi = vscode.window.createStatusBarItem(
     vscode.StatusBarAlignment.Right,
     32
   );
-  sbi.command = "yuescriptrunner.compile";
   sbi.text = "$(zap)Compile Yuescript";
+  sbi.command = ("yuescriptrunner.compile");
   let autoHideStatusButton = (fileName: string) => {
     if (fileName.endsWith(".yue")) {
       sbi.show();
     } else {
       sbi.hide();
+      return;
     }
   };
+
+  // const onConfigChanged = vscode.workspace.onDidChangeConfiguration((e) => {
+  //   let operation = (config.get("yuescriptrunner.defaultAction") ?? "compile");
+  //   sbi.command = ("yuescriptrunner." + operation);
+  //   switch (operation) {
+  //     case "compile":
+  //       sbi.text = "$(zap)Compile Yuescript";
+  //       break;
+  //     case "execute":
+  //       sbi.text = "$(zap)Execute Yuescript";
+  //       break;
+  //     case "compile_all":
+  //       sbi.text = "$(zap)Compile all Yuescripts";
+  //       break;
+  //     case "compile_all_and_run_love":
+  //       sbi.text = "$(zap)Compile & run LOVE";
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // });
   const onEditorChanged = vscode.window.onDidChangeActiveTextEditor(
     (e: vscode.TextEditor | undefined) => {
       if (e === undefined) {
@@ -40,6 +63,7 @@ export function activate(context: vscode.ExtensionContext) {
     }
   });
   context.subscriptions.push(
+    //onConfigChanged,
     onEditorChanged,
     sbi,
     vscode.commands.registerCommand(
@@ -50,7 +74,8 @@ export function activate(context: vscode.ExtensionContext) {
       "yuescriptrunner.compile_all",
       compileYueDir
     ),
-    vscode.commands.registerCommand("yuescriptrunner.compile", compileYue)
+    vscode.commands.registerCommand("yuescriptrunner.compile", compileYue),
+    vscode.commands.registerCommand("yuescriptrunner.run", executeYue),
   );
 }
 /**
@@ -162,6 +187,17 @@ function compileYue(): void {
       editor.document.fileName.replaceAll("\\", "/") +
       " " +
       getAddedArgs()
+  );
+}
+function executeYue(): void {
+  assertTextEditor();
+  const editor = vscode.window.activeTextEditor!;
+  getTerminal(vscode.window.terminals).sendText(
+    "\byue -e " +
+      editor.document.fileName.replaceAll("\\", "/")
+      // editor.document.fileName.replaceAll("\\", "/") +
+      // " " +
+      // getAddedArgs()
   );
 }
 export function deactivate() {}

@@ -3,7 +3,7 @@
   "displayName": "YueRunner",
   "description": "in-editor Yuescript compilation assistant",
   "publisher": "MTLabs",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "icon": "logo.png",
   "repository": {
     "type": "git",
@@ -83,6 +83,14 @@
           "default": "lovec",
           "description": "LÖVE executable to use."
         },
+        "yuescriptrunner.defaultAction": {
+          "enum": [
+						"compile", "compile_all", "execute", "compile_all_and_run_love"
+					],
+          "type": "string",
+          "default": "compile",
+          "description": "Default action displayed on the status bar."
+        },
         "yuescriptrunner.targetLuaVersion": {
           "enum": [
 						"5.1", "5.2", "5.3", "5.4"
@@ -99,11 +107,15 @@
         "title": "Compile this Yuescript"
       },
       {
+        "command": "yuescriptrunner.run",
+        "title": "Run this Yuescript"
+      },
+      {
         "command": "yuescriptrunner.compile_all",
         "title": "Compile all Yuescripts (in this directory)"
       },
       {
-        "command": "yuescriptrunner.compile_all_and_make_love",
+        "command": "yuescriptrunner.compile_all_and_run_love",
         "title": "Compile all Yuescripts & run LOVE2D (in this directory)"
       }
     ],
@@ -114,11 +126,15 @@
           "when": "editorLangId == yuescript"
         },
         {
+          "command": "yuescriptrunner.run",
+          "when": "editorLangId == yuescript"
+        },
+        {
           "command": "yuescriptrunner.compile_all",
           "when": "editorLangId == yuescript"
         },
         {
-          "command": "yuescriptrunner.compile_all_and_make_love",
+          "command": "yuescriptrunner.compile_all_and_run_love",
           "when": "editorLangId == yuescript"
         }
       ]

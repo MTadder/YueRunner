@@ -20,9 +20,10 @@ for compiling any currently open `yue` script.
 
 > Open your command palette with `CTRL` + `SHIFT` + `P`
 
+- `Run this Yuescript`
 - `Compile this Yuescript`
 - `Compile all Yuescripts (in this directory)`
-- `Compile all Yuescripts & run LÖVE2D (in this directory)`
+- `Compile all Yuescripts & run LOVE2D (in this directory)`
 
 ## Requirements
 
