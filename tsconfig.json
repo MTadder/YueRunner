@@ -8,8 +8,24 @@
 		],
 		"sourceMap": true,
 		"rootDir": "src",
-		"strict": true,   /* enable all strict type-checking options */
-		/* Additional Checks */
+		"strict": true,
+		"removeComments": true,
+		"pretty": true,
+		"strictFunctionTypes": true,
+		"strictNullChecks": true,
+		"strictPropertyInitialization": true,
+		"alwaysStrict": true,
+		"allowUnreachableCode": false,
+		"allowUnusedLabels": false,
+		"allowJs": false,
+		"strictBindCallApply": true,
+		"diagnostics": true,
+		"noUnusedLocals": true,
+		"useUnknownInCatchVariables": true,
+		"extendedDiagnostics": true,
+		"noImplicitThis": true,
+		"noImplicitAny": true,
+		"noImplicitOverride": true,
 		"noImplicitReturns": true, /* Report error when not all code paths in function return a value. */
 		"noFallthroughCasesInSwitch": true, /* Report errors for fallthrough cases in switch statement. */
 		"noUnusedParameters": true,  /* Report errors on unused parameters. */

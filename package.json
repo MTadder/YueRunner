@@ -4,7 +4,7 @@
   "description": "in-editor Yuescript compilation assistant",
   "publisher": "MTLabs",
   "version": "0.1.15",
-  "icon": "logo.ico",
+  "icon": "logo.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/MTadder/YueRunner.git"
