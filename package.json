@@ -3,8 +3,8 @@
   "displayName": "YueRunner",
   "description": "in-editor Yuescript compilation assistant",
   "publisher": "MTLabs",
-  "version": "0.1.14",
-  "icon": "logo.png",
+  "version": "0.1.15",
+  "icon": "logo.ico",
   "repository": {
     "type": "git",
     "url": "https://github.com/MTadder/YueRunner.git"
@@ -90,7 +90,7 @@
         },
         "yuescriptrunner.defaultAction": {
           "enum": [
-						"Compile", "Compile All", "Run", "Compile All and Run LÖVE"
+						"Compile", "Compile all", "Run", "Compile all and Run LÖVE"
 					],
           "type": "string",
           "default": "Run",
