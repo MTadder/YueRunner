@@ -54,7 +54,6 @@ for compiling any currently open `yue` script, and/or project.
 > Help out by reporting any issues to the [Github](https://github.com/MTadder/YueRunner)
 
 - If _you try to use `LÖVE2D` without it being installed_, an error will occur.
-- If _you change your default shell profile_ while a `yue` script is open, the status bar button will disappear, **until you reopen the tab**.
 
 ---
 

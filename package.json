@@ -3,7 +3,7 @@
   "displayName": "YueRunner",
   "description": "simple in-editor Yuescript assistant",
   "publisher": "MTLabs",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "icon": "logo.png",
   "repository": {
     "type": "git",
@@ -44,7 +44,7 @@
         },
         "yuescriptrunner.reserveComments": {
           "title": "Keep Comments?",
-          "description": "Reserve comments before statements?",
+          "description": "Preserve comments that come before statements?",
           "type": "boolean",
           "default": false
         },
@@ -79,24 +79,28 @@
           "default": true
         },
         "yuescriptrunner.matchLineNumbers": {
+          "title": "Match Line Numbers?",
           "description": "Rewrite output to match line numbers?",
           "type": "boolean",
           "default": false
         },
         "yuescriptrunner.iconOnly": {
+          "title": "Icon Only?",
           "description": "Only show the icon on the button?",
           "type": "boolean",
           "default": false
         },
         "yuescriptrunner.loveExecutable": {
+          "title": "LÖVE Executable",
+          "description": "LÖVE executable to use.",
           "enum": [
 						"love", "lovec"
 					],
           "type": "string",
-          "default": "lovec",
-          "description": "LÖVE executable to use."
+          "default": "lovec"
         },
         "yuescriptrunner.defaultAction": {
+          "title": "Default Action",
           "description": "Default action displayed on the status bar.",
           "enum": [
 						"Compile", "Compile all", "Run", "Compile all and Run LÖVE"
@@ -105,6 +109,7 @@
           "default": "Run"
         },
         "yuescriptrunner.targetLuaVersion": {
+          "title": "Lua Version",
           "description": "Lua version the compiler will target.",
           "enum": [
 						"5.1", "5.2", "5.3", "5.4"
