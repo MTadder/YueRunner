@@ -74,19 +74,19 @@
         },
         "yuescriptrunner.useImplicitReturn": {
           "title": "Use Implicit Returns?",
-          "description": "Use implicit return at end of file?"
+          "description": "Use implicit return at end of file?",
           "type": "boolean",
-          "default": true,
+          "default": true
         },
         "yuescriptrunner.matchLineNumbers": {
+          "description": "Rewrite output to match line numbers?",
           "type": "boolean",
-          "default": false,
-          "description": "Rewrite output to match line numbers?"
+          "default": false
         },
         "yuescriptrunner.iconOnly": {
+          "description": "Only show the icon on the button?",
           "type": "boolean",
-          "default": false,
-          "description": "Only show the icon on the button?"
+          "default": false
         },
         "yuescriptrunner.loveExecutable": {
           "enum": [
@@ -97,20 +97,20 @@
           "description": "LÖVE executable to use."
         },
         "yuescriptrunner.defaultAction": {
+          "description": "Default action displayed on the status bar.",
           "enum": [
 						"Compile", "Compile all", "Run", "Compile all and Run LÖVE"
 					],
           "type": "string",
-          "default": "Run",
-          "description": "Default action displayed on the status bar."
+          "default": "Run"
         },
         "yuescriptrunner.targetLuaVersion": {
+          "description": "Lua version the compiler will target.",
           "enum": [
 						"5.1", "5.2", "5.3", "5.4"
 					],
           "type": "string",
-          "default": "5.4",
-          "description": "Lua version the compiler will target."
+          "default": "5.4"
         }
       }
     },
