@@ -1,9 +1,9 @@
 {
   "name": "yuescriptrunner",
   "displayName": "YueRunner",
-  "description": "in-editor Yuescript compilation assistant",
+  "description": "simple in-editor Yuescript assistant",
   "publisher": "MTLabs",
-  "version": "0.1.16-alpha",
+  "version": "0.2.0",
   "icon": "logo.png",
   "repository": {
     "type": "git",
@@ -31,44 +31,52 @@
       "title": "YueRunner Configuration",
       "properties": {
         "yuescriptrunner.useMinification": {
+          "title": "Use code Minification?",
+          "description": "Use code minification during compilation?",
           "type": "boolean",
-          "default": false,
-          "description": "Use code minification during compilation?"
+          "default": false
         },
         "yuescriptrunner.useSpacesInstead": {
+          "title": "Use Spaces?",
+          "description": "Use spaces instead of tabs during compilation?",
           "type": "boolean",
-          "default": false,
-          "description": "Use spaces instead of tabs during compilation?"
+          "default": false
         },
         "yuescriptrunner.reserveComments": {
+          "title": "Keep Comments?",
+          "description": "Reserve comments before statements?",
           "type": "boolean",
-          "default": false,
-          "description": "Reserve comments before statements?"
+          "default": false
         },
         "yuescriptrunner.writeLineNumbers": {
+          "title": "Append Line Numbers?",
+          "description": "Write line numbers from the yuescript source?",
           "type": "boolean",
-          "default": false,
-          "description": "Write line numbers from the yue source?"
+          "default": false
         },
         "yuescriptrunner.dumpGlobals": {
+          "title": "Dump Globals?",
+          "description": "Dump global variables used in NAME | LINE | COLUMN",
           "type": "boolean",
-          "default": false,
-          "description": "Dump global variables used in NAME LINE COLUMN"
+          "default": false
         },
         "yuescriptrunner.dumpToStdout": {
+          "title": "Dump to Code to Console?",
+          "description": "Dump generated code to the standard output?",
           "type": "boolean",
-          "default": false,
-          "description": "Dump output to standard out?"
+          "default": false
         },
         "yuescriptrunner.dumpCompileTime": {
+          "title": "Dump Compile Duration?",
+          "description": "Dump compile time duration?",
           "type": "boolean",
-          "default": false,
-          "description": "Dump compile time duration?"
+          "default": false
         },
         "yuescriptrunner.useImplicitReturn": {
+          "title": "Use Implicit Returns?",
+          "description": "Use implicit return at end of file?"
           "type": "boolean",
           "default": true,
-          "description": "Use implicit return at end of file?"
         },
         "yuescriptrunner.matchLineNumbers": {
           "type": "boolean",

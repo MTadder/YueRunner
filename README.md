@@ -13,8 +13,8 @@
 
 ## Features
 
-provides palette commands, and a status bar button
-for compiling any currently open `yue` script.
+provides palette commands, and a simple status bar button
+for compiling any currently open `yue` script, and/or project.
 
 ### Commands
 
@@ -23,7 +23,7 @@ for compiling any currently open `yue` script.
 - `Run this Yuescript`
 - `Compile this Yuescript`
 - `Compile all Yuescripts (in this directory)`
-- `Compile all Yuescripts & run LOVE2D (in this directory)`
+- `Compile all Yuescripts & Run LOVE2D (in this directory)`
 
 ## Requirements
 
