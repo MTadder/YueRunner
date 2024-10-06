@@ -3,7 +3,7 @@
   "displayName": "YueRunner",
   "description": "simple in-editor Yuescript assistant",
   "publisher": "MTLabs",
-  "version": "0.2.1",
+  "version": "0.3.1",
   "icon": "logo.png",
   "repository": {
     "type": "git",
@@ -31,67 +31,56 @@
       "title": "YueRunner Configuration",
       "properties": {
         "yuescriptrunner.useMinification": {
-          "title": "Use code Minification?",
           "description": "Use code minification during compilation?",
           "type": "boolean",
           "default": false
         },
         "yuescriptrunner.useSpacesInstead": {
-          "title": "Use Spaces?",
           "description": "Use spaces instead of tabs during compilation?",
           "type": "boolean",
           "default": false
         },
         "yuescriptrunner.reserveComments": {
-          "title": "Keep Comments?",
           "description": "Preserve comments that come before statements?",
           "type": "boolean",
           "default": false
         },
         "yuescriptrunner.writeLineNumbers": {
-          "title": "Append Line Numbers?",
           "description": "Write line numbers from the yuescript source?",
           "type": "boolean",
           "default": false
         },
         "yuescriptrunner.dumpGlobals": {
-          "title": "Dump Globals?",
           "description": "Dump global variables used in NAME | LINE | COLUMN",
           "type": "boolean",
           "default": false
         },
         "yuescriptrunner.dumpToStdout": {
-          "title": "Dump to Code to Console?",
           "description": "Dump generated code to the standard output?",
           "type": "boolean",
           "default": false
         },
         "yuescriptrunner.dumpCompileTime": {
-          "title": "Dump Compile Duration?",
           "description": "Dump compile time duration?",
           "type": "boolean",
           "default": false
         },
         "yuescriptrunner.useImplicitReturn": {
-          "title": "Use Implicit Returns?",
           "description": "Use implicit return at end of file?",
           "type": "boolean",
           "default": true
         },
         "yuescriptrunner.matchLineNumbers": {
-          "title": "Match Line Numbers?",
           "description": "Rewrite output to match line numbers?",
           "type": "boolean",
           "default": false
         },
         "yuescriptrunner.iconOnly": {
-          "title": "Icon Only?",
           "description": "Only show the icon on the button?",
           "type": "boolean",
           "default": false
         },
         "yuescriptrunner.loveExecutable": {
-          "title": "LÖVE Executable",
           "description": "LÖVE executable to use.",
           "enum": [
 						"love", "lovec"
@@ -100,7 +89,6 @@
           "default": "lovec"
         },
         "yuescriptrunner.defaultAction": {
-          "title": "Default Action",
           "description": "Default action displayed on the status bar.",
           "enum": [
 						"Compile", "Compile all", "Run", "Compile all and Run LÖVE"
@@ -109,7 +97,6 @@
           "default": "Run"
         },
         "yuescriptrunner.targetLuaVersion": {
-          "title": "Lua Version",
           "description": "Lua version the compiler will target.",
           "enum": [
 						"5.1", "5.2", "5.3", "5.4"

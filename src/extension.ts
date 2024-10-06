@@ -1,16 +1,32 @@
 import * as vscode from "vscode";
 import * as path from "path";
-
+/**
+ * 
+ */
 const terminalName = "YueRunner";
+/**
+ * 
+ */
 const defaultLuaVersion = "5.4";
-
+/**
+ * 
+ * @param context 
+ */
 export function activate(context: vscode.ExtensionContext) {
+  /**
+   * 
+   */
   const sbi = vscode.window.createStatusBarItem(
     vscode.StatusBarAlignment.Right,
     32
   );
   sbi.tooltip = "Compile";
   sbi.command = "yuescriptrunner.compile";
+  /**
+   * 
+   * @param fileName 
+   * @returns 
+   */
   const autoHideStatusButton = (fileName: string) => {
     if (fileName.endsWith(".yue")) {
       sbi.show();
@@ -19,6 +35,9 @@ export function activate(context: vscode.ExtensionContext) {
       return;
     }
   };
+  /**
+   * 
+   */
   const onConfigChanged = vscode.workspace.onDidChangeConfiguration(() => {
     const config = vscode.workspace.getConfiguration();
     const operation: string = (
@@ -52,6 +71,9 @@ export function activate(context: vscode.ExtensionContext) {
     }
     sbi.tooltip = operation;
   });
+  /**
+   * 
+   */
   const onEditorChanged = vscode.window.onDidChangeActiveTextEditor(
     (e: vscode.TextEditor | undefined) => {
       if (e === undefined) {
@@ -110,6 +132,10 @@ function getTerminal(available: readonly vscode.Terminal[]): vscode.Terminal {
   term.show();
   return term;
 }
+/**
+ * 
+ * @returns 
+ */
 function getAddedArgs(): string {
   var args: string = "";
   const config = vscode.workspace.getConfiguration();
@@ -149,9 +175,18 @@ function getAddedArgs(): string {
   }
   return args;
 }
+/**
+ * 
+ * @param file_path 
+ * @returns 
+ */
 function getFileRootPath(file_path: string): string {
   return path.dirname(file_path.replaceAll("\\", "/"));
 }
+/**
+ * 
+ * @returns 
+ */
 function assertTextEditor() {
   const err_message: string = (terminalName + " is unable to compile this");
   if (vscode.window.activeTextEditor === undefined) {
@@ -164,6 +199,11 @@ function assertTextEditor() {
 // more than 0 yuescripts in the parent directory.
 // TODO: Also, there should be an option for only running LOVE,
 // optionally skipping the compilation step.
+// TODO:
+// Unfocus the terminal after every step.
+/**
+ * 
+ */
 function compileYueDirAndLove(): void {
   assertTextEditor();
   const editor = vscode.window.activeTextEditor!;
@@ -185,6 +225,9 @@ function compileYueDirAndLove(): void {
   );
   // Check for errors? TODO.
 }
+/**
+ * 
+ */
 function compileYueDir(): void {
   assertTextEditor();
   getTerminal(vscode.window.terminals).sendText(
@@ -195,6 +238,9 @@ function compileYueDir(): void {
     )
   );
 }
+/**
+ * 
+ */
 function compileYue(): void {
   assertTextEditor();
   const editor = vscode.window.activeTextEditor!;
@@ -206,6 +252,9 @@ function compileYue(): void {
     )
   );
 }
+/**
+ * 
+ */
 function executeYue(): void {
   assertTextEditor();
   const editor = vscode.window.activeTextEditor!;
@@ -215,4 +264,7 @@ function executeYue(): void {
     )
   );
 }
+/**
+ * 
+ */
 export function deactivate() { }
