@@ -1,7 +1,7 @@
 # YueRunner
 
 <center>
-<img src="logo.png" width=128 height=128>
+<img src="logo.png" width=64 height=64>
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/MTadder/YueRunner?style=flat-square)
 ![GitHub Tag](https://img.shields.io/github/v/tag/MTadder/YueRunner?style=flat-square)
