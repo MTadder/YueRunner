@@ -14,7 +14,7 @@ const defaultLuaVersion = "5.4";
  */
 export function activate(context: vscode.ExtensionContext) {
   /**
-   * 
+   * Status Bar Item for ease of compilation
    */
   const sbi = vscode.window.createStatusBarItem(
     vscode.StatusBarAlignment.Right,
@@ -23,11 +23,11 @@ export function activate(context: vscode.ExtensionContext) {
   sbi.tooltip = "Compile";
   sbi.command = "yuescriptrunner.compile";
   /**
-   * 
-   * @param fileName 
-   * @returns 
+   * Programmatically shows, or hides the Status Bar Item,
+   * based upon the provided file extension.
+   * @param fileName
    */
-  const autoHideStatusButton = (fileName: string) => {
+  const autoHideStatusButton = (fileName: string): void => {
     if (fileName.endsWith(".yue")) {
       sbi.show();
     } else {
@@ -36,7 +36,8 @@ export function activate(context: vscode.ExtensionContext) {
     }
   };
   /**
-   * 
+   * Changes Status Bar Item properties based upon the currently
+   * selected extension settings.
    */
   const onConfigChanged = vscode.workspace.onDidChangeConfiguration(() => {
     const config = vscode.workspace.getConfiguration();
@@ -72,7 +73,8 @@ export function activate(context: vscode.ExtensionContext) {
     sbi.tooltip = operation;
   });
   /**
-   * 
+   * Shows or hides the Status Bar Item, based upon the currently active
+   * Text Editor.
    */
   const onEditorChanged = vscode.window.onDidChangeActiveTextEditor(
     (e: vscode.TextEditor | undefined) => {
