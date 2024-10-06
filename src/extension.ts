@@ -88,8 +88,8 @@ export function activate(context: vscode.ExtensionContext) {
   if (editor !== undefined) {
     autoHideStatusButton(editor!.document.fileName);
   }
+  // Close old terminals
   vscode.window.terminals.forEach((term) => {
-    // close old terminals.
     if (term.name === terminalName) {
       term.hide();
       term.sendText("exit");
@@ -133,8 +133,8 @@ function getTerminal(available: readonly vscode.Terminal[]): vscode.Terminal {
   return term;
 }
 /**
- * 
- * @returns 
+ * Returns the optionally-chosen arguments, each incrementally appended.
+ * @returns arguments
  */
 function getAddedArgs(): string {
   var args: string = "";
@@ -176,18 +176,18 @@ function getAddedArgs(): string {
   return args;
 }
 /**
- * 
- * @param file_path 
- * @returns 
+ * Returns a file path's parent directory, as a string.
+ * @param file_path path to a file within a folder
+ * @returns the parent directory of the file
  */
 function getFileRootPath(file_path: string): string {
   return path.dirname(file_path.replaceAll("\\", "/"));
 }
 /**
- * 
- * @returns 
+ * Asserts that the user has an active Text Editor, and
+ * throws a visual warning when one cannot be obtained.
  */
-function assertTextEditor() {
+function assertTextEditor(): void {
   const err_message: string = (terminalName + " is unable to compile this");
   if (vscode.window.activeTextEditor === undefined) {
     vscode.window.showErrorMessage(err_message);
@@ -202,7 +202,8 @@ function assertTextEditor() {
 // TODO:
 // Unfocus the terminal after every step.
 /**
- * 
+ * Compiles the currently open Yuescript, and then executes the
+ * LOVE executable.
  */
 function compileYueDirAndLove(): void {
   assertTextEditor();
@@ -226,7 +227,8 @@ function compileYueDirAndLove(): void {
   // Check for errors? TODO.
 }
 /**
- * 
+ * Compiles all scripts in the currently open Yuescript's root
+ * directory, if any. 
  */
 function compileYueDir(): void {
   assertTextEditor();
@@ -239,7 +241,7 @@ function compileYueDir(): void {
   );
 }
 /**
- * 
+ * Compiles the currently open Yuescript, if any.
  */
 function compileYue(): void {
   assertTextEditor();
@@ -253,7 +255,7 @@ function compileYue(): void {
   );
 }
 /**
- * 
+ * Executes the currently open Yuescript, if any.
  */
 function executeYue(): void {
   assertTextEditor();
@@ -265,6 +267,6 @@ function executeYue(): void {
   );
 }
 /**
- * 
+ * ??
  */
 export function deactivate() { }
