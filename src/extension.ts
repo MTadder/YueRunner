@@ -1,16 +1,16 @@
 import * as vscode from "vscode";
 import * as path from "path";
 /**
- * 
+ *
  */
 const terminalName = "YueRunner";
 /**
- * 
+ *
  */
 const defaultLuaVersion = "5.4";
 /**
- * 
- * @param context 
+ *
+ * @param context
  */
 export function activate(context: vscode.ExtensionContext) {
   /**
@@ -41,30 +41,27 @@ export function activate(context: vscode.ExtensionContext) {
    */
   const onConfigChanged = vscode.workspace.onDidChangeConfiguration(() => {
     const config = vscode.workspace.getConfiguration();
-    const operation: string = (
-      config.get("yuescriptrunner.defaultAction") ?? "Compile"
-    );
-    const icon_only: boolean = (
-      config.get("yuescriptrunner.iconOnly") ?? false
-    );
+    const operation: string =
+      config.get("yuescriptrunner.defaultAction") ?? "Compile";
+    const icon_only: boolean = config.get("yuescriptrunner.iconOnly") ?? false;
     const e_zap = "$(zap)";
     const e_run = "$(run)";
     const e_all = "$(run-all)";
     switch (operation) {
       case "Run":
-        sbi.text = (icon_only ? e_run : (e_run + "Run Yuescript"));
+        sbi.text = icon_only ? e_run : e_run + "Run Yuescript";
         sbi.command = "yuescriptrunner.run";
         break;
       case "Compile":
-        sbi.text = (icon_only ? e_zap : (e_zap + "Compile Yuescript"));
+        sbi.text = icon_only ? e_zap : e_zap + "Compile Yuescript";
         sbi.command = "yuescriptrunner.compile";
         break;
       case "Compile all":
-        sbi.text = (icon_only ? e_zap : (e_zap + "Compile all Yuescripts"));
+        sbi.text = icon_only ? e_zap : e_zap + "Compile all Yuescripts";
         sbi.command = "yuescriptrunner.compile_all";
         break;
       case "Compile all and Run LÖVE":
-        sbi.text = (icon_only ? e_all : (e_all + "Compile all & Run LÖVE"));
+        sbi.text = icon_only ? e_all : e_all + "Compile all & Run LÖVE";
         sbi.command = "yuescriptrunner.compile_all_and_run_love";
         break;
       default:
@@ -86,7 +83,7 @@ export function activate(context: vscode.ExtensionContext) {
       }
     }
   );
-  const editor: (vscode.TextEditor | undefined) = vscode.window.activeTextEditor;
+  const editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor;
   if (editor !== undefined) {
     autoHideStatusButton(editor!.document.fileName);
   }
@@ -111,7 +108,7 @@ export function activate(context: vscode.ExtensionContext) {
       compileYueDir
     ),
     vscode.commands.registerCommand("yuescriptrunner.compile", compileYue),
-    vscode.commands.registerCommand("yuescriptrunner.run", executeYue),
+    vscode.commands.registerCommand("yuescriptrunner.run", executeYue)
   );
 }
 /**
@@ -124,14 +121,14 @@ function getTerminal(available: readonly vscode.Terminal[]): vscode.Terminal {
   for (let i = 0; i < available.length; i++) {
     const term = available[i];
     if (term.name === terminalName) {
-      term.show();
+      term.show(true);
       return term;
     }
   }
   const term = vscode.window.createTerminal({
     name: terminalName,
   });
-  term.show();
+  term.show(true);
   return term;
 }
 /**
@@ -150,11 +147,10 @@ function getAddedArgs(): string {
   if (config.get("yuescriptrunner.dumpToStdout")) {
     args += "-p ";
   }
-  const useTargetLuaVersion: string = (
-    config.get("yuescriptrunner.targetLuaVersion") ?? ""
-  );
+  const useTargetLuaVersion: string =
+    config.get("yuescriptrunner.targetLuaVersion") ?? "";
   if (useTargetLuaVersion !== defaultLuaVersion) {
-    args += ("--target-version=" + useTargetLuaVersion + " ");
+    args += "--target-version=" + useTargetLuaVersion + " ";
   }
   // append the options, incrementally.
   if (config.get("yuescriptrunner.useSpacesInstead") ?? false) {
@@ -185,12 +181,23 @@ function getAddedArgs(): string {
 function getFileRootPath(file_path: string): string {
   return path.dirname(file_path.replaceAll("\\", "/"));
 }
+function focusActiveDocument(config: vscode.WorkspaceConfiguration): void {
+  if ((config.get("yuescriptrunner.reFocusDocument") ?? false) === false) {
+    return;
+  }
+  // Re-focus the current text doc.
+  const doc: vscode.TextDocument | undefined =
+    vscode.window.activeTextEditor?.document;
+  if (doc !== undefined) {
+    vscode.window.showTextDocument(doc, undefined, false);
+  }
+}
 /**
  * Asserts that the user has an active Text Editor, and
  * throws a visual warning when one cannot be obtained.
  */
 function assertTextEditor(): void {
-  const err_message: string = (terminalName + " is unable to compile this");
+  const err_message: string = terminalName + " is unable to compile this";
   if (vscode.window.activeTextEditor === undefined) {
     vscode.window.showErrorMessage(err_message);
     return;
@@ -201,8 +208,6 @@ function assertTextEditor(): void {
 // more than 0 yuescripts in the parent directory.
 // TODO: Also, there should be an option for only running LOVE,
 // optionally skipping the compilation step.
-// TODO:
-// Unfocus the terminal after every step.
 /**
  * Compiles the currently open Yuescript, and then executes the
  * LOVE executable.
@@ -213,34 +218,34 @@ function compileYueDirAndLove(): void {
   const term = getTerminal(vscode.window.terminals);
   const config = vscode.workspace.getConfiguration();
   term.sendText(
-    ("\byue " + getFileRootPath(editor.document.fileName) + " " + getAddedArgs()),
+    "\byue " + getFileRootPath(editor.document.fileName) + " " + getAddedArgs(),
     true
   );
   term.sendText(
-    ("\b" +
+    "\b" +
       ((config.get("yuescriptrunner.loveExecutable") as string) ?? "lovec") +
       " " +
       getFileRootPath(editor.document.fileName) +
       " " +
-      getAddedArgs()
-    ),
+      getAddedArgs(),
     true
   );
   // Check for errors? TODO.
+  focusActiveDocument(config);
 }
 /**
  * Compiles all scripts in the currently open Yuescript's root
- * directory, if any. 
+ * directory, if any.
  */
 function compileYueDir(): void {
   assertTextEditor();
   getTerminal(vscode.window.terminals).sendText(
-    ("\byue " +
+    "\byue " +
       getFileRootPath(vscode.window.activeTextEditor!.document.fileName) +
       " " +
       getAddedArgs()
-    )
   );
+  focusActiveDocument(vscode.workspace.getConfiguration());
 }
 /**
  * Compiles the currently open Yuescript, if any.
@@ -249,12 +254,12 @@ function compileYue(): void {
   assertTextEditor();
   const editor = vscode.window.activeTextEditor!;
   getTerminal(vscode.window.terminals).sendText(
-    ("\byue " +
+    "\byue " +
       editor.document.fileName.replaceAll("\\", "/") +
       " " +
       getAddedArgs()
-    )
   );
+  focusActiveDocument(vscode.workspace.getConfiguration());
 }
 /**
  * Executes the currently open Yuescript, if any.
@@ -263,12 +268,11 @@ function executeYue(): void {
   assertTextEditor();
   const editor = vscode.window.activeTextEditor!;
   getTerminal(vscode.window.terminals).sendText(
-    ("\byue -e " +
-      editor.document.fileName.replaceAll("\\", "/")
-    )
+    "\byue -e " + editor.document.fileName.replaceAll("\\", "/")
   );
+  focusActiveDocument(vscode.workspace.getConfiguration());
 }
 /**
  * ??
  */
-export function deactivate() { }
+export function deactivate() {}

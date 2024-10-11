@@ -3,7 +3,7 @@
   "displayName": "YueRunner",
   "description": "simple in-editor Yuescript assistant",
   "publisher": "MTLabs",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "icon": "logo.png",
   "repository": {
     "type": "git",
@@ -49,6 +49,11 @@
           "description": "Write line numbers from the yuescript source?",
           "type": "boolean",
           "default": false
+        },
+        "yuescriptrunner.reFocusDocument": {
+          "description": "Should the active document be refocused after each action?",
+          "type": "boolean",
+          "default": true
         },
         "yuescriptrunner.dumpGlobals": {
           "description": "Dump global variables used in NAME | LINE | COLUMN",

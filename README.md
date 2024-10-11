@@ -35,8 +35,9 @@ for compiling any currently open `yue` script, and/or project.
 
 ## Extension Settings
 
-- `yuescriptrunner.iconOnly`
 - `yuescriptrunner.defaultAction`
+- `yuescriptrunner.reFocusDocument`
+- `yuescriptrunner.iconOnly`
 - `yuescriptrunner.dumpGlobals`
 - `yuescriptrunner.dumpToStdout`
 - `yuescriptrunner.targetLuaVersion`
