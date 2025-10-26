@@ -13,8 +13,14 @@
 
 ## Features
 
-provides palette commands, and a simple status bar button
-for compiling any currently open `yue` script, and/or project.
+Provides palette commands and a convenient status bar button for compiling and running Yuescript files.
+
+**New in v0.4.0:**
+- Fixed status bar button visibility issue - button now appears immediately when opening Yuescript files
+- Auto-save before compile/run (configurable)
+- Success notifications on compilation (optional)
+- Clear terminal before running commands (optional)
+- Improved configuration descriptions with helpful context
 
 ### Commands
 
