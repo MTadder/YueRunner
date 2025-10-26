@@ -1,9 +1,9 @@
 {
   "name": "yuescriptrunner",
   "displayName": "YueRunner",
-  "description": "simple in-editor Yuescript assistant",
+  "description": "In-editor Yuescript compiler and runner with LÖVE2D support",
   "publisher": "MTLabs",
-  "version": "0.3.6",
+  "version": "0.4.0",
   "icon": "logo.png",
   "repository": {
     "type": "git",
