@@ -36,10 +36,9 @@ export function activate(context: vscode.ExtensionContext) {
     }
   };
   /**
-   * Changes Status Bar Item properties based upon the currently
-   * selected extension settings.
+   * Updates the Status Bar Item based on configuration settings.
    */
-  const onConfigChanged = vscode.workspace.onDidChangeConfiguration(() => {
+  const updateStatusBarItem = (): void => {
     const config = vscode.workspace.getConfiguration();
     const operation: string =
       config.get("yuescriptrunner.defaultAction") ?? "Compile";
@@ -68,6 +67,20 @@ export function activate(context: vscode.ExtensionContext) {
         break;
     }
     sbi.tooltip = operation;
+    
+    // Ensure the button is visible if a yuescript file is active
+    const editor = vscode.window.activeTextEditor;
+    if (editor && editor.document.fileName.endsWith(".yue")) {
+      sbi.show();
+    }
+  };
+
+  /**
+   * Changes Status Bar Item properties based upon the currently
+   * selected extension settings.
+   */
+  const onConfigChanged = vscode.workspace.onDidChangeConfiguration(() => {
+    updateStatusBarItem();
   });
   /**
    * Shows or hides the Status Bar Item, based upon the currently active
@@ -83,6 +96,8 @@ export function activate(context: vscode.ExtensionContext) {
       }
     }
   );
+  // Initialize the status bar item
+  updateStatusBarItem();
   const editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor;
   if (editor !== undefined) {
     autoHideStatusButton(editor!.document.fileName);
@@ -110,6 +125,29 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand("yuescriptrunner.compile", compileYue),
     vscode.commands.registerCommand("yuescriptrunner.run", executeYue)
   );
+}
+/**
+ * Saves the active document if auto-save is enabled.
+ */
+async function autoSaveDocument(): Promise<void> {
+  const config = vscode.workspace.getConfiguration();
+  const autoSave: boolean = config.get("yuescriptrunner.autoSaveBeforeRun") ?? true;
+  
+  if (autoSave && vscode.window.activeTextEditor?.document.isDirty) {
+    await vscode.window.activeTextEditor.document.save();
+  }
+}
+/**
+ * Clears the terminal if the option is enabled.
+ * @param term Terminal to clear
+ */
+function clearTerminalIfEnabled(term: vscode.Terminal): void {
+  const config = vscode.workspace.getConfiguration();
+  const shouldClear: boolean = config.get("yuescriptrunner.clearTerminalBeforeRun") ?? false;
+  
+  if (shouldClear) {
+    term.sendText("clear", true);
+  }
 }
 /**
  * Returns the current YuescriptRunner Terminal.
@@ -212,10 +250,12 @@ function assertTextEditor(): void {
  * Compiles the currently open Yuescript, and then executes the
  * LOVE executable.
  */
-function compileYueDirAndLove(): void {
+async function compileYueDirAndLove(): Promise<void> {
   assertTextEditor();
+  await autoSaveDocument();
   const editor = vscode.window.activeTextEditor!;
   const term = getTerminal(vscode.window.terminals);
+  clearTerminalIfEnabled(term);
   const config = vscode.workspace.getConfiguration();
   term.sendText(
     "\byue " + getFileRootPath(editor.document.fileName) + " " + getAddedArgs(),
@@ -237,9 +277,12 @@ function compileYueDirAndLove(): void {
  * Compiles all scripts in the currently open Yuescript's root
  * directory, if any.
  */
-function compileYueDir(): void {
+async function compileYueDir(): Promise<void> {
   assertTextEditor();
-  getTerminal(vscode.window.terminals).sendText(
+  await autoSaveDocument();
+  const term = getTerminal(vscode.window.terminals);
+  clearTerminalIfEnabled(term);
+  term.sendText(
     "\byue " +
       getFileRootPath(vscode.window.activeTextEditor!.document.fileName) +
       " " +
@@ -250,24 +293,36 @@ function compileYueDir(): void {
 /**
  * Compiles the currently open Yuescript, if any.
  */
-function compileYue(): void {
+async function compileYue(): Promise<void> {
   assertTextEditor();
+  await autoSaveDocument();
   const editor = vscode.window.activeTextEditor!;
-  getTerminal(vscode.window.terminals).sendText(
+  const term = getTerminal(vscode.window.terminals);
+  clearTerminalIfEnabled(term);
+  term.sendText(
     "\byue " +
       editor.document.fileName.replaceAll("\\", "/") +
       " " +
       getAddedArgs()
   );
   focusActiveDocument(vscode.workspace.getConfiguration());
+  
+  // Show notification if enabled
+  const config = vscode.workspace.getConfiguration();
+  if (config.get("yuescriptrunner.showNotifications") ?? false) {
+    vscode.window.showInformationMessage("Yuescript compiled successfully");
+  }
 }
 /**
  * Executes the currently open Yuescript, if any.
  */
-function executeYue(): void {
+async function executeYue(): Promise<void> {
   assertTextEditor();
+  await autoSaveDocument();
   const editor = vscode.window.activeTextEditor!;
-  getTerminal(vscode.window.terminals).sendText(
+  const term = getTerminal(vscode.window.terminals);
+  clearTerminalIfEnabled(term);
+  term.sendText(
     "\byue -e " + editor.document.fileName.replaceAll("\\", "/")
   );
   focusActiveDocument(vscode.workspace.getConfiguration());
