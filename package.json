@@ -1,9 +1,9 @@
 {
   "name": "yuescriptrunner",
   "displayName": "YueRunner",
-  "description": "simple in-editor Yuescript assistant",
+  "description": "In-editor Yuescript compiler and runner with LÖVE2D support",
   "publisher": "MTLabs",
-  "version": "0.3.6",
+  "version": "0.4.0",
   "icon": "logo.png",
   "repository": {
     "type": "git",
@@ -31,62 +31,62 @@
       "title": "YueRunner Configuration",
       "properties": {
         "yuescriptrunner.useMinification": {
-          "description": "Use code minification during compilation?",
+          "description": "Enable code minification to reduce the size of compiled Lua output (removes whitespace and shortens variable names)",
           "type": "boolean",
           "default": false
         },
         "yuescriptrunner.useSpacesInstead": {
-          "description": "Use spaces instead of tabs during compilation?",
+          "description": "Use spaces instead of tabs for indentation in the compiled Lua output",
           "type": "boolean",
           "default": false
         },
         "yuescriptrunner.reserveComments": {
-          "description": "Preserve comments that come before statements?",
+          "description": "Preserve comments from the Yuescript source in the compiled Lua output (comments before statements)",
           "type": "boolean",
           "default": false
         },
         "yuescriptrunner.writeLineNumbers": {
-          "description": "Write line numbers from the yuescript source?",
+          "description": "Include line number information from the Yuescript source in the compiled Lua output for better debugging",
           "type": "boolean",
           "default": false
         },
         "yuescriptrunner.reFocusDocument": {
-          "description": "Should the active document be refocused after each action?",
+          "description": "Automatically return focus to the editor document after running a command (keeps terminal from stealing focus)",
           "type": "boolean",
           "default": true
         },
         "yuescriptrunner.dumpGlobals": {
-          "description": "Dump global variables used in NAME | LINE | COLUMN",
+          "description": "Output a list of global variables used in the code with their location (NAME | LINE | COLUMN format)",
           "type": "boolean",
           "default": false
         },
         "yuescriptrunner.dumpToStdout": {
-          "description": "Dump generated code to the standard output?",
+          "description": "Print the compiled Lua code directly to the terminal instead of writing to a file",
           "type": "boolean",
           "default": false
         },
         "yuescriptrunner.dumpCompileTime": {
-          "description": "Dump compile time duration?",
+          "description": "Display the time taken to compile the Yuescript code in the terminal output",
           "type": "boolean",
           "default": false
         },
         "yuescriptrunner.useImplicitReturn": {
-          "description": "Use implicit return at end of file?",
+          "description": "Automatically add a return statement for the last expression in the file (Lua best practice)",
           "type": "boolean",
           "default": true
         },
         "yuescriptrunner.matchLineNumbers": {
-          "description": "Rewrite output to match line numbers?",
+          "description": "Rewrite the compiled output to maintain the same line numbers as the source Yuescript file",
           "type": "boolean",
           "default": false
         },
         "yuescriptrunner.iconOnly": {
-          "description": "Only show the icon on the button?",
+          "description": "Show only an icon on the status bar button instead of icon with text (saves space)",
           "type": "boolean",
           "default": false
         },
         "yuescriptrunner.loveExecutable": {
-          "description": "LÖVE executable to use.",
+          "description": "Choose which LÖVE2D executable to use ('love' for release, 'lovec' for console output)",
           "enum": [
 						"love", "lovec"
 					],
@@ -94,7 +94,7 @@
           "default": "lovec"
         },
         "yuescriptrunner.defaultAction": {
-          "description": "Default action displayed on the status bar.",
+          "description": "Choose the default action to display on the status bar button (what happens when you click it)",
           "enum": [
 						"Compile", "Compile all", "Run", "Compile all and Run LÖVE"
 					],
@@ -102,12 +102,27 @@
           "default": "Run"
         },
         "yuescriptrunner.targetLuaVersion": {
-          "description": "Lua version the compiler will target.",
+          "description": "Select the Lua version to target for compilation (determines available language features)",
           "enum": [
 						"5.1", "5.2", "5.3", "5.4"
 					],
           "type": "string",
           "default": "5.4"
+        },
+        "yuescriptrunner.autoSaveBeforeRun": {
+          "description": "Automatically save the current file before compiling or running (prevents working with outdated code)",
+          "type": "boolean",
+          "default": true
+        },
+        "yuescriptrunner.showNotifications": {
+          "description": "Show success notifications when compilation completes without errors",
+          "type": "boolean",
+          "default": false
+        },
+        "yuescriptrunner.clearTerminalBeforeRun": {
+          "description": "Clear the terminal output before running a new command (keeps output clean and readable)",
+          "type": "boolean",
+          "default": false
         }
       }
     },

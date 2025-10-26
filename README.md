@@ -13,8 +13,14 @@
 
 ## Features
 
-provides palette commands, and a simple status bar button
-for compiling any currently open `yue` script, and/or project.
+Provides palette commands and a convenient status bar button for compiling and running Yuescript files.
+
+**New in v0.4.0:**
+- Fixed status bar button visibility issue - button now appears immediately when opening Yuescript files
+- Auto-save before compile/run (configurable)
+- Success notifications on compilation (optional)
+- Clear terminal before running commands (optional)
+- Improved configuration descriptions with helpful context
 
 ### Commands
 
@@ -35,20 +41,36 @@ for compiling any currently open `yue` script, and/or project.
 
 ## Extension Settings
 
-- `yuescriptrunner.defaultAction`
-- `yuescriptrunner.reFocusDocument`
-- `yuescriptrunner.iconOnly`
-- `yuescriptrunner.dumpGlobals`
-- `yuescriptrunner.dumpToStdout`
-- `yuescriptrunner.targetLuaVersion`
-- `yuescriptrunner.useMinification`
-- `yuescriptrunner.useSpacesInstead`
-- `yuescriptrunner.reserveComments`
-- `yuescriptrunner.writeLineNumbers`
-- `yuescriptrunner.dumpCompileTime`
-- `yuescriptrunner.useImplicitReturn`
-- `yuescriptrunner.matchLineNumbers`
-- `yuescriptrunner.loveExecutable`
+This extension contributes the following settings:
+
+### Compilation Options
+
+- `yuescriptrunner.targetLuaVersion` - Select the Lua version to target for compilation (5.1, 5.2, 5.3, or 5.4)
+- `yuescriptrunner.useMinification` - Enable code minification to reduce output size
+- `yuescriptrunner.useSpacesInstead` - Use spaces instead of tabs for indentation
+- `yuescriptrunner.reserveComments` - Preserve comments from source in compiled output
+- `yuescriptrunner.writeLineNumbers` - Include line number information for debugging
+- `yuescriptrunner.useImplicitReturn` - Automatically add return statement for last expression
+- `yuescriptrunner.matchLineNumbers` - Maintain same line numbers as source file
+
+### Debug and Output Options
+
+- `yuescriptrunner.dumpGlobals` - Output list of global variables with their locations
+- `yuescriptrunner.dumpToStdout` - Print compiled code to terminal instead of file
+- `yuescriptrunner.dumpCompileTime` - Display compilation time in terminal
+
+### UI and Behavior Options
+
+- `yuescriptrunner.defaultAction` - Choose the default action for the status bar button
+- `yuescriptrunner.iconOnly` - Show only icon on status bar button (saves space)
+- `yuescriptrunner.reFocusDocument` - Return focus to editor after running commands
+- `yuescriptrunner.autoSaveBeforeRun` - Automatically save file before compiling/running
+- `yuescriptrunner.showNotifications` - Show success notifications on compilation
+- `yuescriptrunner.clearTerminalBeforeRun` - Clear terminal before running commands
+
+### LÖVE2D Options
+
+- `yuescriptrunner.loveExecutable` - Choose LÖVE executable (love or lovec)
 
 ## Known Issues
 
