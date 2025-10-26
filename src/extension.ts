@@ -127,6 +127,16 @@ export function activate(context: vscode.ExtensionContext) {
   );
 }
 /**
+ * Shows a success notification if enabled in configuration.
+ * @param message The message to show
+ */
+function showNotificationIfEnabled(message: string): void {
+  const config = vscode.workspace.getConfiguration();
+  if (config.get("yuescriptrunner.showNotifications") ?? false) {
+    vscode.window.showInformationMessage(message);
+  }
+}
+/**
  * Saves the active document if auto-save is enabled.
  */
 async function autoSaveDocument(): Promise<void> {
@@ -151,7 +161,7 @@ function clearTerminalIfEnabled(term: vscode.Terminal): void {
 }
 /**
  * Returns the current YuescriptRunner Terminal.
- * If ones does not exist, then one is immidiately instantiated.
+ * If one does not exist, then one is immediately instantiated.
  * @param available array of currently available terminals
  * @returns
  */
@@ -272,6 +282,7 @@ async function compileYueDirAndLove(): Promise<void> {
   );
   // Check for errors? TODO.
   focusActiveDocument(config);
+  showNotificationIfEnabled("All Yuescripts compiled and LÖVE started");
 }
 /**
  * Compiles all scripts in the currently open Yuescript's root
@@ -289,6 +300,7 @@ async function compileYueDir(): Promise<void> {
       getAddedArgs()
   );
   focusActiveDocument(vscode.workspace.getConfiguration());
+  showNotificationIfEnabled("All Yuescripts compiled successfully");
 }
 /**
  * Compiles the currently open Yuescript, if any.
@@ -306,12 +318,7 @@ async function compileYue(): Promise<void> {
       getAddedArgs()
   );
   focusActiveDocument(vscode.workspace.getConfiguration());
-  
-  // Show notification if enabled
-  const config = vscode.workspace.getConfiguration();
-  if (config.get("yuescriptrunner.showNotifications") ?? false) {
-    vscode.window.showInformationMessage("Yuescript compiled successfully");
-  }
+  showNotificationIfEnabled("Yuescript compiled successfully");
 }
 /**
  * Executes the currently open Yuescript, if any.
