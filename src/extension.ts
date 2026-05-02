@@ -229,6 +229,10 @@ function getAddedArgs(): string[] {
 function getFileRootPath(file_path: string): string {
   return path.dirname(file_path.replaceAll("\\", "/"));
 }
+/**
+ * Escapes a single terminal argument for the current platform shell.
+ * Returns undefined when the argument contains newline characters.
+ */
 function escapeTerminalArg(arg: string): string | undefined {
   if (/[\r\n]/.test(arg)) {
     return undefined;
@@ -240,6 +244,10 @@ function escapeTerminalArg(arg: string): string | undefined {
 
   return `'${arg.replace(/'/g, `'\\''`)}'`;
 }
+/**
+ * Builds a shell command string using a validated command name and escaped args.
+ * Returns undefined when command name or any argument is considered unsafe.
+ */
 function buildTerminalCommand(command: string, args: string[]): string | undefined {
   if (!/^[a-zA-Z][a-zA-Z0-9_-]*$/.test(command)) {
     vscode.window.showErrorMessage(`${terminalName} blocked an unsafe terminal command.`);
