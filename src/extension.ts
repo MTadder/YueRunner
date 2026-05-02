@@ -229,9 +229,9 @@ function getAddedArgs(): string[] {
 function getFileRootPath(file_path: string): string {
   return path.dirname(file_path.replaceAll("\\", "/"));
 }
-function escapeTerminalArg(arg: string): string {
-  if (/^[a-zA-Z0-9_./:]+$/.test(arg)) {
-    return arg;
+function escapeTerminalArg(arg: string): string | undefined {
+  if (/[\r\n]/.test(arg)) {
+    return undefined;
   }
 
   if (process.platform === "win32") {
@@ -241,12 +241,20 @@ function escapeTerminalArg(arg: string): string {
   return `'${arg.replace(/'/g, `'\\''`)}'`;
 }
 function buildTerminalCommand(command: string, args: string[]): string | undefined {
-  if (!/^[a-zA-Z0-9_.-]+$/.test(command)) {
+  if (!/^[a-zA-Z][a-zA-Z0-9_-]*$/.test(command)) {
     vscode.window.showErrorMessage(`${terminalName} blocked an unsafe terminal command.`);
     return undefined;
   }
 
-  return [command, ...args.map(escapeTerminalArg)].join(" ");
+  const escapedArgs = args.map(escapeTerminalArg);
+  if (escapedArgs.some((arg) => arg === undefined)) {
+    vscode.window.showErrorMessage(
+      `${terminalName} blocked an unsafe terminal argument.`
+    );
+    return undefined;
+  }
+
+  return [command, ...escapedArgs].join(" ");
 }
 function runTerminalCommand(
   term: vscode.Terminal,
