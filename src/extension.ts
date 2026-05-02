@@ -156,8 +156,7 @@ function clearTerminalIfEnabled(term: vscode.Terminal): void {
   const shouldClear: boolean = config.get("yuescriptrunner.clearTerminalBeforeRun") ?? false;
 
   if (shouldClear) {
-    term.show(false);
-    void vscode.commands.executeCommand("workbench.action.terminal.clear");
+    term.sendText(process.platform === "win32" ? "cls" : "clear", true);
   }
 }
 /**
@@ -235,7 +234,11 @@ function escapeTerminalArg(arg: string): string {
     return arg;
   }
 
-  return `"${arg.replace(/["\\]/g, "\\$&")}"`;
+  if (process.platform === "win32") {
+    return `"${arg.replace(/"/g, `""`).replace(/%/g, "%%")}"`;
+  }
+
+  return `'${arg.replace(/'/g, `'\\''`)}'`;
 }
 function runTerminalCommand(
   term: vscode.Terminal,
