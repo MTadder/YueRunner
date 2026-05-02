@@ -263,7 +263,7 @@ function getActiveYueEditor(): vscode.TextEditor | undefined {
   return editor;
 }
 function focusActiveDocument(config: vscode.WorkspaceConfiguration): void {
-  if ((config.get("yuescriptrunner.reFocusDocument") ?? true) === false) {
+  if ((config.get("yuescriptrunner.reFocusDocument") ?? false) === false) {
     return;
   }
   // Re-focus the current text doc.
