@@ -230,7 +230,7 @@ function getFileRootPath(file_path: string): string {
   return path.dirname(file_path.replaceAll("\\", "/"));
 }
 function escapeTerminalArg(arg: string): string {
-  if (/^[a-zA-Z0-9_./:=+-]+$/.test(arg)) {
+  if (/^[a-zA-Z0-9_./:]+$/.test(arg)) {
     return arg;
   }
 
@@ -240,13 +240,40 @@ function escapeTerminalArg(arg: string): string {
 
   return `'${arg.replace(/'/g, `'\\''`)}'`;
 }
+function buildTerminalCommand(command: string, args: string[]): string | undefined {
+  if (!/^[a-zA-Z0-9_.-]+$/.test(command)) {
+    vscode.window.showErrorMessage(`${terminalName} blocked an unsafe terminal command.`);
+    return undefined;
+  }
+
+  return [command, ...args.map(escapeTerminalArg)].join(" ");
+}
 function runTerminalCommand(
   term: vscode.Terminal,
   command: string,
   args: string[]
 ): void {
-  const terminalCommand = [command, ...args.map(escapeTerminalArg)].join(" ");
+  const terminalCommand = buildTerminalCommand(command, args);
+  if (terminalCommand === undefined) {
+    return;
+  }
+
   term.sendText(terminalCommand, true);
+}
+function runTerminalCommandOnSuccess(
+  term: vscode.Terminal,
+  firstCommand: string,
+  firstArgs: string[],
+  secondCommand: string,
+  secondArgs: string[]
+): void {
+  const first = buildTerminalCommand(firstCommand, firstArgs);
+  const second = buildTerminalCommand(secondCommand, secondArgs);
+  if (first === undefined || second === undefined) {
+    return;
+  }
+
+  term.sendText(`${first} && ${second}`, true);
 }
 function getActiveYueEditor(): vscode.TextEditor | undefined {
   const editor = vscode.window.activeTextEditor;
@@ -294,13 +321,13 @@ async function compileYueDirAndLove(): Promise<void> {
   const term = getTerminal(vscode.window.terminals);
   clearTerminalIfEnabled(term);
   const config = vscode.workspace.getConfiguration();
-  runTerminalCommand(term, "yue", [
-    getFileRootPath(editor.document.fileName),
-    ...getAddedArgs(),
-  ]);
-  runTerminalCommand(term, config.get("yuescriptrunner.loveExecutable") ?? "lovec", [
-    getFileRootPath(editor.document.fileName),
-  ]);
+  runTerminalCommandOnSuccess(
+    term,
+    "yue",
+    [getFileRootPath(editor.document.fileName), ...getAddedArgs()],
+    config.get("yuescriptrunner.loveExecutable") ?? "lovec",
+    [getFileRootPath(editor.document.fileName)]
+  );
   focusActiveDocument(config);
   showNotificationIfEnabled("All Yuescripts compiled and LÖVE started");
 }
