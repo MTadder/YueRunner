@@ -4,6 +4,7 @@ import * as path from "path";
  *
  */
 const terminalName = "YueRunner";
+const yueExtension = ".yue";
 /**
  *
  */
@@ -28,11 +29,10 @@ export function activate(context: vscode.ExtensionContext) {
    * @param fileName
    */
   const autoHideStatusButton = (fileName: string): void => {
-    if (fileName.endsWith(".yue")) {
+    if (fileName.endsWith(yueExtension)) {
       sbi.show();
     } else {
       sbi.hide();
-      return;
     }
   };
   /**
@@ -48,29 +48,29 @@ export function activate(context: vscode.ExtensionContext) {
     const e_all = "$(run-all)";
     switch (operation) {
       case "Run":
-        sbi.text = icon_only ? e_run : e_run + "Run Yuescript";
+        sbi.text = icon_only ? e_run : `${e_run} Run Yuescript`;
         sbi.command = "yuescriptrunner.run";
         break;
       case "Compile":
-        sbi.text = icon_only ? e_zap : e_zap + "Compile Yuescript";
+        sbi.text = icon_only ? e_zap : `${e_zap} Compile Yuescript`;
         sbi.command = "yuescriptrunner.compile";
         break;
       case "Compile all":
-        sbi.text = icon_only ? e_zap : e_zap + "Compile all Yuescripts";
+        sbi.text = icon_only ? e_zap : `${e_zap} Compile all Yuescripts`;
         sbi.command = "yuescriptrunner.compile_all";
         break;
       case "Compile all and Run LÖVE":
-        sbi.text = icon_only ? e_all : e_all + "Compile all & Run LÖVE";
+        sbi.text = icon_only ? e_all : `${e_all} Compile all & Run LÖVE`;
         sbi.command = "yuescriptrunner.compile_all_and_run_love";
         break;
       default:
         break;
     }
     sbi.tooltip = operation;
-    
+
     // Ensure the button is visible if a yuescript file is active
     const editor = vscode.window.activeTextEditor;
-    if (editor && editor.document.fileName.endsWith(".yue")) {
+    if (editor && editor.document.fileName.endsWith(yueExtension)) {
       sbi.show();
     }
   };
@@ -92,7 +92,7 @@ export function activate(context: vscode.ExtensionContext) {
         sbi.hide();
         return;
       } else {
-        autoHideStatusButton(e!.document.fileName);
+        autoHideStatusButton(e.document.fileName);
       }
     }
   );
@@ -100,7 +100,7 @@ export function activate(context: vscode.ExtensionContext) {
   updateStatusBarItem();
   const editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor;
   if (editor !== undefined) {
-    autoHideStatusButton(editor!.document.fileName);
+    autoHideStatusButton(editor.document.fileName);
   }
   // Close old terminals
   vscode.window.terminals.forEach((term) => {
@@ -139,12 +139,12 @@ function showNotificationIfEnabled(message: string): void {
 /**
  * Saves the active document if auto-save is enabled.
  */
-async function autoSaveDocument(): Promise<void> {
+async function autoSaveDocument(document: vscode.TextDocument): Promise<void> {
   const config = vscode.workspace.getConfiguration();
   const autoSave: boolean = config.get("yuescriptrunner.autoSaveBeforeRun") ?? true;
-  
-  if (autoSave && vscode.window.activeTextEditor?.document.isDirty) {
-    await vscode.window.activeTextEditor.document.save();
+
+  if (autoSave && document.isDirty) {
+    await document.save();
   }
 }
 /**
@@ -154,9 +154,9 @@ async function autoSaveDocument(): Promise<void> {
 function clearTerminalIfEnabled(term: vscode.Terminal): void {
   const config = vscode.workspace.getConfiguration();
   const shouldClear: boolean = config.get("yuescriptrunner.clearTerminalBeforeRun") ?? false;
-  
+
   if (shouldClear) {
-    term.sendText("clear", true);
+    term.sendText(process.platform === "win32" ? "cls" : "clear", true);
   }
 }
 /**
@@ -183,41 +183,41 @@ function getTerminal(available: readonly vscode.Terminal[]): vscode.Terminal {
  * Returns the optionally-chosen arguments, each incrementally appended.
  * @returns arguments
  */
-function getAddedArgs(): string {
-  var args: string = "";
+function getAddedArgs(): string[] {
+  const args: string[] = [];
   const config = vscode.workspace.getConfiguration();
   if (config.get("yuescriptrunner.useMinification") ?? false) {
-    args += "-m ";
+    args.push("-m");
   }
   if (config.get("yuescriptrunner.dumpGlobals") ?? false) {
-    args += "-g ";
+    args.push("-g");
   }
   if (config.get("yuescriptrunner.dumpToStdout")) {
-    args += "-p ";
+    args.push("-p");
   }
   const useTargetLuaVersion: string =
     config.get("yuescriptrunner.targetLuaVersion") ?? "";
   if (useTargetLuaVersion !== defaultLuaVersion) {
-    args += "--target-version=" + useTargetLuaVersion + " ";
+    args.push(`--target-version=${useTargetLuaVersion}`);
   }
   // append the options, incrementally.
   if (config.get("yuescriptrunner.useSpacesInstead") ?? false) {
-    args += "-s ";
+    args.push("-s");
   }
   if (config.get("yuescriptrunner.reserveComments") ?? false) {
-    args += "-c ";
+    args.push("-c");
   }
   if (config.get("yuescriptrunner.writeLineNumbers") ?? false) {
-    args += "-l ";
+    args.push("-l");
   }
   if (config.get("yuescriptrunner.dumpCompileTime") ?? false) {
-    args += "-b ";
+    args.push("-b");
   }
   if ((config.get("yuescriptrunner.useImplicitReturn") ?? true) === false) {
-    args += "-j ";
+    args.push("-j");
   }
   if (config.get("yuescriptrunner.matchLineNumbers") ?? false) {
-    args += "-r ";
+    args.push("-r");
   }
   return args;
 }
@@ -228,6 +228,85 @@ function getAddedArgs(): string {
  */
 function getFileRootPath(file_path: string): string {
   return path.dirname(file_path.replaceAll("\\", "/"));
+}
+/**
+ * Escapes a single terminal argument for the current platform shell.
+ * Returns undefined when the argument contains newline characters.
+ */
+function escapeTerminalArg(arg: string): string | undefined {
+  if (/[\r\n]/.test(arg)) {
+    return undefined;
+  }
+
+  if (process.platform === "win32") {
+    return `"${arg.replace(/"/g, `""`).replace(/%/g, "%%")}"`;
+  }
+
+  return `'${arg.replace(/'/g, `'\\''`)}'`;
+}
+/**
+ * Builds a shell command string using a validated command name and escaped args.
+ * Returns undefined when command name or any argument is considered unsafe.
+ */
+function buildTerminalCommand(command: string, args: string[]): string | undefined {
+  if (!/^[a-zA-Z][a-zA-Z0-9_-]*$/.test(command)) {
+    vscode.window.showErrorMessage(`${terminalName} blocked an unsafe terminal command.`);
+    return undefined;
+  }
+
+  const escapedArgs = args.map(escapeTerminalArg);
+  if (escapedArgs.some((arg) => arg === undefined)) {
+    vscode.window.showErrorMessage(
+      `${terminalName} blocked an unsafe terminal argument.`
+    );
+    return undefined;
+  }
+
+  return [command, ...escapedArgs].join(" ");
+}
+function runTerminalCommand(
+  term: vscode.Terminal,
+  command: string,
+  args: string[]
+): void {
+  const terminalCommand = buildTerminalCommand(command, args);
+  if (terminalCommand === undefined) {
+    return;
+  }
+
+  term.sendText(terminalCommand, true);
+}
+function runTerminalCommandOnSuccess(
+  term: vscode.Terminal,
+  firstCommand: string,
+  firstArgs: string[],
+  secondCommand: string,
+  secondArgs: string[]
+): void {
+  const first = buildTerminalCommand(firstCommand, firstArgs);
+  const second = buildTerminalCommand(secondCommand, secondArgs);
+  if (first === undefined || second === undefined) {
+    return;
+  }
+
+  term.sendText(`${first} && ${second}`, true);
+}
+function getActiveYueEditor(): vscode.TextEditor | undefined {
+  const editor = vscode.window.activeTextEditor;
+
+  if (editor === undefined) {
+    vscode.window.showErrorMessage(`${terminalName} could not find an active editor.`);
+    return undefined;
+  }
+
+  if (!editor.document.fileName.endsWith(yueExtension)) {
+    vscode.window.showErrorMessage(
+      `${terminalName} commands only work for ${yueExtension} files.`
+    );
+    return undefined;
+  }
+
+  return editor;
 }
 function focusActiveDocument(config: vscode.WorkspaceConfiguration): void {
   if ((config.get("yuescriptrunner.reFocusDocument") ?? false) === false) {
@@ -240,17 +319,6 @@ function focusActiveDocument(config: vscode.WorkspaceConfiguration): void {
     vscode.window.showTextDocument(doc, undefined, false);
   }
 }
-/**
- * Asserts that the user has an active Text Editor, and
- * throws a visual warning when one cannot be obtained.
- */
-function assertTextEditor(): void {
-  const err_message: string = terminalName + " is unable to compile this";
-  if (vscode.window.activeTextEditor === undefined) {
-    vscode.window.showErrorMessage(err_message);
-    return;
-  }
-}
 // TODO: Allow support for having a non-yue file open,
 // and still be able to use this command, only if there exists
 // more than 0 yuescripts in the parent directory.
@@ -261,26 +329,21 @@ function assertTextEditor(): void {
  * LOVE executable.
  */
 async function compileYueDirAndLove(): Promise<void> {
-  assertTextEditor();
-  await autoSaveDocument();
-  const editor = vscode.window.activeTextEditor!;
+  const editor = getActiveYueEditor();
+  if (editor === undefined) {
+    return;
+  }
+  await autoSaveDocument(editor.document);
   const term = getTerminal(vscode.window.terminals);
   clearTerminalIfEnabled(term);
   const config = vscode.workspace.getConfiguration();
-  term.sendText(
-    "\byue " + getFileRootPath(editor.document.fileName) + " " + getAddedArgs(),
-    true
+  runTerminalCommandOnSuccess(
+    term,
+    "yue",
+    [getFileRootPath(editor.document.fileName), ...getAddedArgs()],
+    config.get("yuescriptrunner.loveExecutable") ?? "lovec",
+    [getFileRootPath(editor.document.fileName)]
   );
-  term.sendText(
-    "\b" +
-      ((config.get("yuescriptrunner.loveExecutable") as string) ?? "lovec") +
-      " " +
-      getFileRootPath(editor.document.fileName) +
-      " " +
-      getAddedArgs(),
-    true
-  );
-  // Check for errors? TODO.
   focusActiveDocument(config);
   showNotificationIfEnabled("All Yuescripts compiled and LÖVE started");
 }
@@ -289,16 +352,17 @@ async function compileYueDirAndLove(): Promise<void> {
  * directory, if any.
  */
 async function compileYueDir(): Promise<void> {
-  assertTextEditor();
-  await autoSaveDocument();
+  const editor = getActiveYueEditor();
+  if (editor === undefined) {
+    return;
+  }
+  await autoSaveDocument(editor.document);
   const term = getTerminal(vscode.window.terminals);
   clearTerminalIfEnabled(term);
-  term.sendText(
-    "\byue " +
-      getFileRootPath(vscode.window.activeTextEditor!.document.fileName) +
-      " " +
-      getAddedArgs()
-  );
+  runTerminalCommand(term, "yue", [
+    getFileRootPath(editor.document.fileName),
+    ...getAddedArgs(),
+  ]);
   focusActiveDocument(vscode.workspace.getConfiguration());
   showNotificationIfEnabled("All Yuescripts compiled successfully");
 }
@@ -306,17 +370,17 @@ async function compileYueDir(): Promise<void> {
  * Compiles the currently open Yuescript, if any.
  */
 async function compileYue(): Promise<void> {
-  assertTextEditor();
-  await autoSaveDocument();
-  const editor = vscode.window.activeTextEditor!;
+  const editor = getActiveYueEditor();
+  if (editor === undefined) {
+    return;
+  }
+  await autoSaveDocument(editor.document);
   const term = getTerminal(vscode.window.terminals);
   clearTerminalIfEnabled(term);
-  term.sendText(
-    "\byue " +
-      editor.document.fileName.replaceAll("\\", "/") +
-      " " +
-      getAddedArgs()
-  );
+  runTerminalCommand(term, "yue", [
+    editor.document.fileName.replaceAll("\\", "/"),
+    ...getAddedArgs(),
+  ]);
   focusActiveDocument(vscode.workspace.getConfiguration());
   showNotificationIfEnabled("Yuescript compiled successfully");
 }
@@ -324,14 +388,17 @@ async function compileYue(): Promise<void> {
  * Executes the currently open Yuescript, if any.
  */
 async function executeYue(): Promise<void> {
-  assertTextEditor();
-  await autoSaveDocument();
-  const editor = vscode.window.activeTextEditor!;
+  const editor = getActiveYueEditor();
+  if (editor === undefined) {
+    return;
+  }
+  await autoSaveDocument(editor.document);
   const term = getTerminal(vscode.window.terminals);
   clearTerminalIfEnabled(term);
-  term.sendText(
-    "\byue -e " + editor.document.fileName.replaceAll("\\", "/")
-  );
+  runTerminalCommand(term, "yue", [
+    "-e",
+    editor.document.fileName.replaceAll("\\", "/"),
+  ]);
   focusActiveDocument(vscode.workspace.getConfiguration());
 }
 /**
